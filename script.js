@@ -122,28 +122,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 25);
   }
 
-  // ---------- Image Loading (Skeleton) ----------
-  const handleImageLoad = (img) => {
-    img.classList.add('loaded');
-    const parent = img.parentElement;
-    if (parent && parent.classList.contains('skeleton')) {
-      parent.classList.remove('skeleton');
-    }
-  };
-
-  const initImageSkeletons = () => {
-    const images = document.querySelectorAll('.project-img img, .project-gallery img');
-    images.forEach(img => {
-      if (img.complete) {
-        handleImageLoad(img);
-      } else {
-        img.parentElement.classList.add('skeleton');
-        img.addEventListener('load', () => handleImageLoad(img));
-      }
-    });
-  };
-  initImageSkeletons();
-
   // ---------- Portfolio Filters ----------
   const filterButtons = document.querySelectorAll('.portfolio-filters button');
   const projectsGrid = document.querySelector('#projectsGrid');
@@ -561,20 +539,8 @@ function loadProjectDetails() {
     stackedGallery.innerHTML = '';
     galleryImgs.forEach((img, i) => {
       const slide = document.createElement('div');
-      slide.className = 'stacked-slide skeleton'; // Added skeleton
+      slide.className = 'stacked-slide';
       slide.innerHTML = `<img src="${img}" alt="${project.title} - Image ${i + 1}" loading="${i < 3 ? 'eager' : 'lazy'}" decoding="async">`;
-      
-      const imgElement = slide.querySelector('img');
-      if (imgElement.complete) {
-        slide.classList.remove('skeleton');
-        imgElement.classList.add('loaded');
-      } else {
-        imgElement.addEventListener('load', () => {
-          slide.classList.remove('skeleton');
-          imgElement.classList.add('loaded');
-        });
-      }
-
       stackedGallery.appendChild(slide);
     });
 

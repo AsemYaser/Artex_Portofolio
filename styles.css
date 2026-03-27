@@ -1025,59 +1025,16 @@ body.dark-mode .header.dark .logo .logo-text {
   width: 100%;
   aspect-ratio: 4/3;
   overflow: hidden;
-  position: relative;
-  background-color: var(--color-off-white);
-}
-
-body.dark-mode .project-img {
-  background-color: #1a1a1a;
-}
-
-/* Skeleton Shimmer */
-.project-img.skeleton::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.05),
-    transparent
-  );
-  z-index: 1;
-  animation: shimmer 1.5s infinite;
-}
-
-body.light-mode .project-img.skeleton::before {
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(0, 0, 0, 0.03),
-    transparent
-  );
-}
-
-@keyframes shimmer {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
 }
 
 .project-card img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform var(--transition-slow), opacity 0.8s ease;
-  will-change: transform, opacity;
+  transition: transform var(--transition-slow);
+  will-change: transform;
   transform: translateZ(0);
   backface-visibility: hidden;
-  opacity: 0;
-}
-
-.project-card img.loaded {
-  opacity: 1;
 }
 
 .project-card:hover img {
@@ -1602,34 +1559,7 @@ body.light-mode .project-img.skeleton::before {
   height: 400px;
   object-fit: cover;
   cursor: pointer;
-  transition: transform var(--transition-fast), opacity 0.8s ease;
-  opacity: 0;
-}
-
-.project-gallery img.loaded {
-  opacity: 1;
-}
-
-.project-gallery .skeleton {
-  position: relative;
-  background-color: #1a1a1a;
-  overflow: hidden;
-}
-
-.project-gallery .skeleton::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.05),
-    transparent
-  );
-  animation: shimmer 1.5s infinite;
+  transition: transform var(--transition-fast);
 }
 
 .project-gallery img:hover {
