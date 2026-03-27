@@ -1,1 +1,5 @@
+_backup_originals/
 .vscode/
+*.py
+node_modules/
+.DS_Store

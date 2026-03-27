@@ -10,14 +10,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ---------- Header Scroll Effect ----------
   const header = document.getElementById('header');
+  let ticking = false;
   const handleScroll = () => {
-    if (window.scrollY > 80) {
-      header.classList.add('scrolled');
-    } else {
-      header.classList.remove('scrolled');
+    if (!ticking) {
+      window.requestAnimationFrame(() => {
+        if (window.scrollY > 80) {
+          header.classList.add('scrolled');
+        } else {
+          header.classList.remove('scrolled');
+        }
+        ticking = false;
+      });
+      ticking = true;
     }
   };
-  window.addEventListener('scroll', handleScroll);
+  window.addEventListener('scroll', handleScroll, { passive: true });
   handleScroll();
 
   // ---------- Mobile Menu ----------
@@ -67,13 +74,20 @@ document.addEventListener('DOMContentLoaded', () => {
   // ---------- Back to Top ----------
   const backToTop = document.getElementById('backToTop');
   if (backToTop) {
+    let bttTicking = false;
     window.addEventListener('scroll', () => {
-      if (window.scrollY > 500) {
-        backToTop.classList.add('visible');
-      } else {
-        backToTop.classList.remove('visible');
+      if (!bttTicking) {
+        window.requestAnimationFrame(() => {
+          if (window.scrollY > 500) {
+            backToTop.classList.add('visible');
+          } else {
+            backToTop.classList.remove('visible');
+          }
+          bttTicking = false;
+        });
+        bttTicking = true;
       }
-    });
+    }, { passive: true });
 
     backToTop.addEventListener('click', () => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -107,6 +121,28 @@ document.addEventListener('DOMContentLoaded', () => {
       element.textContent = Math.floor(current) + suffix;
     }, 25);
   }
+
+  // ---------- Image Loading (Skeleton) ----------
+  const handleImageLoad = (img) => {
+    img.classList.add('loaded');
+    const parent = img.parentElement;
+    if (parent && parent.classList.contains('skeleton')) {
+      parent.classList.remove('skeleton');
+    }
+  };
+
+  const initImageSkeletons = () => {
+    const images = document.querySelectorAll('.project-img img, .project-gallery img');
+    images.forEach(img => {
+      if (img.complete) {
+        handleImageLoad(img);
+      } else {
+        img.parentElement.classList.add('skeleton');
+        img.addEventListener('load', () => handleImageLoad(img));
+      }
+    });
+  };
+  initImageSkeletons();
 
   // ---------- Portfolio Filters ----------
   const filterButtons = document.querySelectorAll('.portfolio-filters button');
@@ -525,8 +561,20 @@ function loadProjectDetails() {
     stackedGallery.innerHTML = '';
     galleryImgs.forEach((img, i) => {
       const slide = document.createElement('div');
-      slide.className = 'stacked-slide';
-      slide.innerHTML = `<img src="${img}" alt="${project.title} - Image ${i + 1}">`;
+      slide.className = 'stacked-slide skeleton'; // Added skeleton
+      slide.innerHTML = `<img src="${img}" alt="${project.title} - Image ${i + 1}" loading="${i < 3 ? 'eager' : 'lazy'}" decoding="async">`;
+      
+      const imgElement = slide.querySelector('img');
+      if (imgElement.complete) {
+        slide.classList.remove('skeleton');
+        imgElement.classList.add('loaded');
+      } else {
+        imgElement.addEventListener('load', () => {
+          slide.classList.remove('skeleton');
+          imgElement.classList.add('loaded');
+        });
+      }
+
       stackedGallery.appendChild(slide);
     });
 
@@ -822,17 +870,31 @@ if (document.readyState === 'loading') {
     let activeSlide = slideA;
     let inactiveSlide = slideB;
 
+    // Create and add loading spinner
+    const spinner = document.createElement('div');
+    spinner.className = 'lightbox-spinner';
+    wrapper.appendChild(spinner);
+
+    const showSpinner = () => spinner.classList.add('active');
+    const hideSpinner = () => spinner.classList.remove('active');
+
     function preloadImage(url) {
       if (!url) return;
+      // Only preload if connection is not slow
+      if (navigator.connection && (navigator.connection.saveData || navigator.connection.effectiveType.includes('2g'))) return;
       const img = new Image();
       img.src = url;
+      img.decoding = 'async';
     }
 
     function openLightbox(images, index) {
       currentImages = images;
       currentIndex = index;
       
+      showSpinner();
+      activeSlide.onload = hideSpinner;
       activeSlide.src = images[currentIndex];
+      activeSlide.decoding = 'async';
       activeSlide.classList.add('active');
       inactiveSlide.classList.remove('active');
 
@@ -862,7 +924,10 @@ if (document.readyState === 'loading') {
       currentIndex = (currentIndex + direction + currentImages.length) % currentImages.length;
       
       // Setup the hidden slide with new image before fading in
+      showSpinner();
+      inactiveSlide.onload = hideSpinner;
       inactiveSlide.src = currentImages[currentIndex];
+      inactiveSlide.decoding = 'async';
       
       // Triggers immediate CSS crossfade 
       inactiveSlide.classList.add('active');

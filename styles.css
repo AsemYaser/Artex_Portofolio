@@ -614,9 +614,10 @@ section {
 }
 
 .header.scrolled {
-  background: rgba(255, 255, 255, 0.97);
+  background: rgba(255, 255, 255, 0.9);
   box-shadow: 0 2px 30px rgba(0, 0, 0, 0.06);
-  backdrop-filter: blur(20px);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   height: 75px;
 }
 
@@ -942,6 +943,7 @@ body.dark-mode .header.dark .logo .logo-text {
   transition: all var(--transition-medium);
   position: relative;
   background: var(--color-white);
+  contain: layout paint;
 }
 
 .service-card::after {
@@ -1016,22 +1018,66 @@ body.dark-mode .header.dark .logo .logo-text {
   cursor: pointer;
   will-change: transform, opacity;
   transform: translateZ(0);
+  contain: layout paint;
 }
 
 .project-card .project-img {
   width: 100%;
   aspect-ratio: 4/3;
   overflow: hidden;
+  position: relative;
+  background-color: var(--color-off-white);
+}
+
+body.dark-mode .project-img {
+  background-color: #1a1a1a;
+}
+
+/* Skeleton Shimmer */
+.project-img.skeleton::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.05),
+    transparent
+  );
+  z-index: 1;
+  animation: shimmer 1.5s infinite;
+}
+
+body.light-mode .project-img.skeleton::before {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(0, 0, 0, 0.03),
+    transparent
+  );
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
 }
 
 .project-card img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform var(--transition-slow);
-  will-change: transform;
+  transition: transform var(--transition-slow), opacity 0.8s ease;
+  will-change: transform, opacity;
   transform: translateZ(0);
   backface-visibility: hidden;
+  opacity: 0;
+}
+
+.project-card img.loaded {
+  opacity: 1;
 }
 
 .project-card:hover img {
@@ -1556,7 +1602,34 @@ body.dark-mode .header.dark .logo .logo-text {
   height: 400px;
   object-fit: cover;
   cursor: pointer;
-  transition: transform var(--transition-fast);
+  transition: transform var(--transition-fast), opacity 0.8s ease;
+  opacity: 0;
+}
+
+.project-gallery img.loaded {
+  opacity: 1;
+}
+
+.project-gallery .skeleton {
+  position: relative;
+  background-color: #1a1a1a;
+  overflow: hidden;
+}
+
+.project-gallery .skeleton::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.05),
+    transparent
+  );
+  animation: shimmer 1.5s infinite;
 }
 
 .project-gallery img:hover {
@@ -1638,6 +1711,7 @@ body.dark-mode .header.dark .logo .logo-text {
   visibility: hidden;
   transition: opacity 0.2s ease, visibility 0.2s ease;
   will-change: opacity;
+  contain: strict;
 }
 
 .lightbox-overlay.active {
@@ -1678,6 +1752,30 @@ body.dark-mode .header.dark .logo .logo-text {
   opacity: 1;
   visibility: visible;
   z-index: 2;
+}
+
+/* Lightbox Spinner */
+.lightbox-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  border-top-color: var(--color-gold);
+  border-radius: 50%;
+  animation: spinnerRotate 0.8s linear infinite;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease;
+  position: absolute;
+  z-index: 5;
+}
+
+.lightbox-spinner.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+@keyframes spinnerRotate {
+  to { transform: rotate(360deg); }
 }
 
 .lightbox-close {
