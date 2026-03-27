@@ -178,20 +178,29 @@
         flex-direction: column;
       }
       .team-card-bg {
-        height: 350px;
-        object-position: center center;
+        height: 400px;
+        object-position: 20% center; /* Prioritize the faces in the collage */
       }
       .team-card-overlay {
         left: 0;
         bottom: auto;
-        height: 350px;
-        background: linear-gradient(to bottom, rgba(0,0,0,0) 40%, rgba(0,0,0,1) 100%);
+        height: 400px;
+        background: linear-gradient(to bottom, rgba(0,0,0,0) 30%, rgba(0,0,0,0.8) 80%, rgba(0,0,0,1) 100%);
       }
       .team-card-content {
         position: relative;
         left: 0;
-        padding: 0 30px 40px !important;
+        padding: 10px 30px 50px !important;
         background: #000;
+        margin-top: -1px; /* Avoid any potential sub-pixel gaps */
+      }
+      .team-card-content h2 {
+        font-size: 26px !important;
+        margin-bottom: 20px !important;
+      }
+      .team-card-content p {
+        font-size: 13px !important;
+        line-height: 1.9 !important;
       }
     }
   </style>
