@@ -107,7 +107,10 @@
       </div>
       <div class="reveal" style="margin-top: 50px; display: flex; justify-content: center; align-items: center;">
         <div class="team-card">
-          <img src="images/team.png" alt="Our Team" class="team-card-bg">
+          <picture>
+            <source srcset="images/team-mobile.png" media="(max-width: 991px)">
+            <img src="images/team.png" alt="Our Team" class="team-card-bg">
+          </picture>
           <div class="team-card-overlay"></div>
           <div class="team-card-content">
             <h2 style="font-family: var(--font-body, 'Montserrat', sans-serif); font-size: clamp(26px, 2.8vw, 40px); font-weight: 800; letter-spacing: 3px; text-transform: uppercase; color: #fff; margin: 0 0 24px;">ABOUT TEAM</h2>
@@ -179,7 +182,7 @@
       }
       .team-card-bg {
         height: 400px;
-        object-position: 20% center; /* Prioritize the faces in the collage */
+        object-position: center center; /* Optimized for the new mobile-specific photo */
       }
       .team-card-overlay {
         left: 0;
