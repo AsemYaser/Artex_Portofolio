@@ -209,8 +209,8 @@ const projects = {
     style: 'Interactive Experience',
     year: '2026',
     client: 'Interior Showcase',
-    heroImg: 'Artex_360/11.jpg.jpeg',
-    images: ['Artex_360/11.jpg.jpeg'],
+    heroImg: 'Artex_360/opt_11.jpg',
+    images: ['Artex_360/opt_11.jpg'],
     is360: true,  // <-- This flag triggers the 360° viewer
     desc1: 'Step inside our latest interior design concept through a fully immersive 360° virtual tour. Navigate between three distinct spaces using interactive hotspots, experiencing each room as if you were physically present. Drag to look around, zoom to inspect materials and finishes, and click the golden navigation points to seamlessly move between views.',
     desc2: 'This interactive experience showcases how cutting-edge virtual tour technology can elevate the way clients experience design proposals. Every angle, every detail, every texture — explored at your own pace from the comfort of your screen. The future of interior design presentation is here.',
@@ -227,7 +227,7 @@ const projects = {
        ============================================================ */
     scenes: {
       'view1': {
-        image: 'Artex_360/11.jpg.jpeg',
+        image: 'Artex_360/opt_11.jpg',
         label: 'View 1 — Living Area',
         // Initial camera orientation when this scene loads:
         defaultPitch: 0,    // 0 = looking at the horizon
@@ -248,7 +248,7 @@ const projects = {
         ]
       },
       'view2': {
-        image: 'Artex_360/12.jpg.jpeg',
+        image: 'Artex_360/opt_12.jpg',
         label: 'View 2 — Dining Area',
         defaultPitch: 0,
         defaultYaw: 0,
@@ -268,7 +268,7 @@ const projects = {
         ]
       },
       'view3': {
-        image: 'Artex_360/13.jpg.jpeg',
+        image: 'Artex_360/opt_13.jpg',
         label: 'View 3 — Bedroom',
         defaultPitch: 0,
         defaultYaw: 0,
@@ -726,7 +726,7 @@ function init360Tour(project) {
   if (!viewerEl || !project.scenes) return;
 
   const sceneIds = Object.keys(project.scenes);
-  const firstScene = 'view2';  // Default starting scene (12.jpg.jpeg — Dining Area)
+  const firstScene = 'view2';  // Default starting scene (opt_12.jpg — Dining Area)
   let currentSceneId = firstScene;
 
   // ---- Build Pannellum scene config ----
@@ -851,55 +851,6 @@ function init360Tour(project) {
   // Expose viewer to console for debugging hotspot positions
   // Usage: In browser console, type: window.tour360Viewer.getYaw() / .getPitch()
   window.tour360Viewer = viewer;
-
-  /* ============================================================
-     TEMPORARY: Coordinate Helper Tool
-     ============================================================
-     Adds a center crosshair and a live pitch/yaw readout to the
-     viewer so you can visually aim at a door/pathway and read
-     the exact coordinates to use in the hotspot config above.
-
-     >>> DELETE THIS ENTIRE BLOCK once your hotspots are placed <<<
-     ============================================================ */
-  (function initCoordHelper() {
-    // --- Crosshair in the center of the viewer ---
-    const crosshair = document.createElement('div');
-    crosshair.className = 'coord-crosshair';
-    crosshair.textContent = '+';
-    viewerEl.appendChild(crosshair);
-
-    // --- Floating readout box (top-left corner) ---
-    const readout = document.createElement('div');
-    readout.className = 'coord-readout';
-    readout.innerHTML = `
-      <div class="coord-title">◈ Hotspot Coordinate Helper</div>
-      <div class="coord-row">
-        <span class="coord-label">Pitch</span>
-        <span class="coord-value" id="coordPitch">0.00</span>
-      </div>
-      <div class="coord-row">
-        <span class="coord-label">Yaw</span>
-        <span class="coord-value" id="coordYaw">0.00</span>
-      </div>
-      <div class="coord-hint">Aim center at a door → copy values to script.js</div>
-    `;
-    viewerEl.appendChild(readout);
-
-    const pitchEl = document.getElementById('coordPitch');
-    const yawEl = document.getElementById('coordYaw');
-
-    // --- Live update loop (runs every frame) ---
-    function updateCoords() {
-      try {
-        const p = viewer.getPitch();
-        const y = viewer.getYaw();
-        if (pitchEl) pitchEl.textContent = p.toFixed(2);
-        if (yawEl) yawEl.textContent = y.toFixed(2);
-      } catch (e) { /* viewer not ready yet */ }
-      requestAnimationFrame(updateCoords);
-    }
-    requestAnimationFrame(updateCoords);
-  })();
 }
 
 // ========== Before/After Slider ==========
