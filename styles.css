@@ -2506,3 +2506,455 @@ body.dark-mode .header.dark .logo .logo-text {
 .iti__arrow.iti__arrow--up {
   border-bottom-color: rgba(255,255,255,0.7);
 }
+
+/* ============================================
+   360° VIRTUAL TOUR — Styles
+   ============================================ */
+
+/* --- 360° Badge on Portfolio Card --- */
+.project-card .tour-badge-360 {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 5;
+  background: linear-gradient(135deg, var(--color-gold), var(--color-gold-dark));
+  color: #fff;
+  font-family: var(--font-body);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 6px 14px;
+  border-radius: 20px;
+  box-shadow: 0 4px 15px rgba(193, 157, 95, 0.4);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  pointer-events: none;
+}
+
+.project-card .tour-badge-360 svg {
+  width: 14px;
+  height: 14px;
+  fill: #fff;
+  animation: rotateBadge360 4s linear infinite;
+}
+
+@keyframes rotateBadge360 {
+  0% { transform: rotateY(0deg); }
+  100% { transform: rotateY(360deg); }
+}
+
+/* --- 360 Viewer Container --- */
+.tour-360-wrapper {
+  position: relative;
+  width: 100%;
+  margin-top: 40px;
+}
+
+.tour-360-container {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.tour-360-container .pnlm-container {
+  border-radius: 12px;
+}
+
+/* --- Loading Overlay --- */
+.tour-360-loader {
+  position: absolute;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #121212;
+  border-radius: 12px;
+  transition: opacity 0.6s ease, visibility 0.6s ease;
+}
+
+.tour-360-loader.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.tour-360-spinner {
+  width: 48px;
+  height: 48px;
+  border: 2px solid rgba(193, 157, 95, 0.15);
+  border-top-color: var(--color-gold);
+  border-radius: 50%;
+  animation: spin360 0.8s linear infinite;
+}
+
+@keyframes spin360 {
+  to { transform: rotate(360deg); }
+}
+
+.tour-360-loader span {
+  margin-top: 16px;
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+}
+
+/* --- Fade Transition Overlay (between scenes) --- */
+.tour-360-fade {
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+  background: #0a0a0a;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+  border-radius: 12px;
+}
+
+.tour-360-fade.active {
+  opacity: 1;
+}
+
+/* --- Scene Navigation Pills --- */
+.tour-scene-nav {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.tour-scene-btn {
+  font-family: var(--font-body);
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 10px 22px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 30px;
+  background: rgba(255, 255, 255, 0.04);
+  color: #999;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  backdrop-filter: blur(8px);
+}
+
+.tour-scene-btn:hover {
+  border-color: var(--color-gold);
+  color: var(--color-gold);
+  background: rgba(193, 157, 95, 0.08);
+}
+
+.tour-scene-btn.active {
+  border-color: var(--color-gold);
+  background: var(--color-gold);
+  color: #fff;
+  box-shadow: 0 4px 15px rgba(193, 157, 95, 0.3);
+}
+
+/* --- Pannellum Dark/Gold Theme Overrides --- */
+.tour-360-container .pnlm-controls-container {
+  top: 12px !important;
+  left: auto !important;
+  right: 12px !important;
+}
+
+.tour-360-container .pnlm-zoom-controls,
+.tour-360-container .pnlm-fullscreen-toggle-button {
+  background: rgba(18, 18, 18, 0.7) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 8px !important;
+  backdrop-filter: blur(10px) !important;
+}
+
+.tour-360-container .pnlm-zoom-in,
+.tour-360-container .pnlm-zoom-out {
+  background-color: rgba(18, 18, 18, 0.7) !important;
+  border: none !important;
+  border-radius: 8px !important;
+  width: 36px !important;
+  height: 36px !important;
+  color: #e0e0e0 !important;
+  font-size: 18px !important;
+  line-height: 36px !important;
+  transition: background 0.2s ease;
+}
+
+.tour-360-container .pnlm-zoom-in:hover,
+.tour-360-container .pnlm-zoom-out:hover {
+  background-color: rgba(193, 157, 95, 0.3) !important;
+  color: var(--color-gold) !important;
+}
+
+.tour-360-container .pnlm-fullscreen-toggle-button {
+  width: 36px !important;
+  height: 36px !important;
+}
+
+.tour-360-container .pnlm-about-msg {
+  display: none !important;
+}
+
+.tour-360-container .pnlm-load-box {
+  display: none !important;
+}
+
+.tour-360-container .pnlm-compass {
+  display: none !important;
+}
+
+/* --- Custom Hotspot Styling --- */
+.tour-hotspot {
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  position: relative;
+}
+
+.tour-hotspot .hotspot-inner {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--color-gold), var(--color-gold-dark));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 15px rgba(193, 157, 95, 0.5);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  z-index: 2;
+}
+
+.tour-hotspot:hover .hotspot-inner {
+  transform: scale(1.15);
+  box-shadow: 0 6px 25px rgba(193, 157, 95, 0.7);
+}
+
+.tour-hotspot .hotspot-inner svg {
+  width: 18px;
+  height: 18px;
+  fill: #fff;
+}
+
+.tour-hotspot .hotspot-pulse {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 40px;
+  height: 40px;
+  margin-top: -20px;
+  margin-left: -20px;
+  border-radius: 50%;
+  border: 2px solid var(--color-gold);
+  animation: hotspotPulse 2s ease-out infinite;
+  z-index: 1;
+}
+
+@keyframes hotspotPulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
+
+.tour-hotspot .hotspot-label {
+  position: absolute;
+  bottom: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-family: var(--font-body);
+  font-size: 0.6rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 4px 10px;
+  border-radius: 4px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+
+.tour-hotspot:hover .hotspot-label {
+  opacity: 1;
+}
+
+/* --- 360 Viewer Title Bar --- */
+.tour-360-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.tour-360-header h3 {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+  margin: 0;
+}
+
+.tour-360-header .tour-instructions {
+  font-family: var(--font-body);
+  font-size: 0.65rem;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  color: #666;
+}
+
+/* --- Responsive 360 Viewer --- */
+@media (max-width: 768px) {
+  .tour-360-container {
+    aspect-ratio: 4 / 3;
+    border-radius: 8px;
+  }
+
+  .tour-360-loader {
+    border-radius: 8px;
+  }
+
+  .tour-360-fade {
+    border-radius: 8px;
+  }
+
+  .tour-scene-nav {
+    gap: 8px;
+  }
+
+  .tour-scene-btn {
+    padding: 8px 16px;
+    font-size: 0.6rem;
+  }
+
+  .tour-hotspot {
+    width: 34px;
+    height: 34px;
+  }
+
+  .tour-hotspot .hotspot-inner {
+    width: 34px;
+    height: 34px;
+  }
+
+  .tour-hotspot .hotspot-pulse {
+    width: 34px;
+    height: 34px;
+    margin-top: -17px;
+    margin-left: -17px;
+  }
+
+  .tour-360-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+}
+
+@media (max-width: 480px) {
+  .tour-360-container {
+    aspect-ratio: 3 / 2;
+  }
+
+  .tour-scene-btn {
+    padding: 7px 12px;
+    font-size: 0.55rem;
+  }
+}
+
+/* ============================================
+   TEMPORARY: Coordinate Helper Tool
+   Remove these styles once hotspots are placed
+   ============================================ */
+
+/* Center crosshair */
+.coord-crosshair {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 200;
+  pointer-events: none;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 28px;
+  font-weight: 300;
+  line-height: 1;
+  text-shadow: 0 0 6px rgba(0,0,0,0.9), 0 0 2px rgba(0,0,0,0.7);
+  font-family: monospace;
+}
+
+/* Live coordinate readout box */
+.coord-readout {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  z-index: 200;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(193, 157, 95, 0.4);
+  border-radius: 10px;
+  padding: 12px 18px;
+  pointer-events: none;
+  font-family: 'Courier New', monospace;
+  min-width: 220px;
+}
+
+.coord-readout .coord-title {
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+  margin-bottom: 8px;
+  font-family: var(--font-body);
+}
+
+.coord-readout .coord-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 3px 0;
+}
+
+.coord-readout .coord-label {
+  font-size: 0.7rem;
+  color: #888;
+  font-weight: 400;
+}
+
+.coord-readout .coord-value {
+  font-size: 0.85rem;
+  color: #fff;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.coord-readout .coord-hint {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  font-size: 0.5rem;
+  color: #666;
+  letter-spacing: 0.06em;
+  font-family: var(--font-body);
+  text-transform: uppercase;
+}

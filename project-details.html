@@ -8,6 +8,9 @@
     content="Explore the details of our interior design project — gallery, design approach, and project specifications.">
   <title>Project Details — Artex Designs</title>
   <link rel="stylesheet" href="styles.css">
+  <!-- Pannellum 360° Viewer CDN -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css">
+  <script src="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js" defer></script>
   <link rel="icon" type="image/svg+xml"
     href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>◈</text></svg>">
 </head>
@@ -204,6 +207,30 @@
         </div>
 
 
+
+        <!-- ====== 360° VIRTUAL TOUR CONTAINER (hidden by default, shown by JS for 360 projects) ====== -->
+        <div id="tour360Section" style="display: none;">
+          <div class="tour-360-wrapper reveal">
+            <div class="tour-360-header">
+              <h3>◈ Interactive 360° Experience</h3>
+              <span class="tour-instructions">Drag to look around · Scroll to zoom · Click hotspots to navigate</span>
+            </div>
+            <div class="tour-360-container" id="tour360Viewer">
+              <!-- Pannellum renders here -->
+            </div>
+            <!-- Loading overlay -->
+            <div class="tour-360-loader" id="tour360Loader">
+              <div class="tour-360-spinner"></div>
+              <span>Loading 360° View</span>
+            </div>
+            <!-- Fade transition overlay -->
+            <div class="tour-360-fade" id="tour360Fade"></div>
+            <!-- Scene navigation pills -->
+            <div class="tour-scene-nav" id="tour360SceneNav">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+        </div>
 
         <!-- Navigation -->
         <div

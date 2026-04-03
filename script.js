@@ -182,6 +182,107 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // ========== Project Data ==========
 const projects = {
+  /* ============================================================
+     360° VIRTUAL TOUR PROJECT
+     ------------------------------------------------------------ 
+     This project uses the is360 flag to trigger the Pannellum
+     360° viewer instead of the standard stacked image gallery.
+     
+     HOW TO ADJUST HOTSPOT POSITIONS:
+     --------------------------------
+     Each hotspot has "pitch" (vertical) and "yaw" (horizontal):
+       - pitch: -90 (straight down) to +90 (straight up). 0 = horizon.
+       - yaw:   -180 to +180 (full horizontal rotation). 0 = center of image.
+     
+     To find the exact coordinates for a door/pathway:
+       1. Open the 360 viewer in your browser
+       2. Right-click inside the viewer and click on console
+       3. Use: viewer.mouseEventToCoords(event) in the console 
+          while hovering to see live pitch/yaw values
+       4. Or simply drag until the door/pathway is centered,
+          then adjust pitch/yaw values below by small increments
+          (e.g., ±5 to ±10 degrees) until the hotspot sits perfectly.
+     ============================================================ */
+  'virtual-tour-360': {
+    title: 'Immersive Interiors | 360° Virtual Tour',
+    category: 'Virtual Tour',
+    style: 'Interactive Experience',
+    year: '2026',
+    client: 'Interior Showcase',
+    heroImg: 'Artex_360/11.jpg.jpeg',
+    images: ['Artex_360/11.jpg.jpeg'],
+    is360: true,  // <-- This flag triggers the 360° viewer
+    desc1: 'Step inside our latest interior design concept through a fully immersive 360° virtual tour. Navigate between three distinct spaces using interactive hotspots, experiencing each room as if you were physically present. Drag to look around, zoom to inspect materials and finishes, and click the golden navigation points to seamlessly move between views.',
+    desc2: 'This interactive experience showcases how cutting-edge virtual tour technology can elevate the way clients experience design proposals. Every angle, every detail, every texture — explored at your own pace from the comfort of your screen. The future of interior design presentation is here.',
+    /* ============================================================
+       SCENES CONFIGURATION
+       ------------------------------------------------------------ 
+       Each scene = one 360° image + its hotspots.
+       
+       Hotspot properties:
+         - pitch: vertical angle (-90 to +90)
+         - yaw:   horizontal angle (-180 to +180)  
+         - targetScene: which scene ID to navigate to
+         - label: tooltip text shown on hover
+       ============================================================ */
+    scenes: {
+      'view1': {
+        image: 'Artex_360/11.jpg.jpeg',
+        label: 'View 1 — Living Area',
+        // Initial camera orientation when this scene loads:
+        defaultPitch: 0,    // 0 = looking at the horizon
+        defaultYaw: 0,      // 0 = center of the equirectangular image
+        hotspots: [
+          {
+            pitch: -2.05,
+            yaw: 4.40,
+            targetScene: 'view3',
+            label: 'Go to View 3'
+          },
+          {
+            pitch: 0.03,
+            yaw: 40.40,
+            targetScene: 'view2',
+            label: 'Go to View 2'
+          }
+        ]
+      },
+      'view2': {
+        image: 'Artex_360/12.jpg.jpeg',
+        label: 'View 2 — Dining Area',
+        defaultPitch: 0,
+        defaultYaw: 0,
+        hotspots: [
+          {
+            pitch: -1.22,
+            yaw: -157.24,    // Points back toward View 1
+            targetScene: 'view3',
+            label: 'Go to View 3'
+          },
+          {
+            pitch: -8.42,
+            yaw: 158.88,     // Points toward View 3
+            targetScene: 'view1',
+            label: 'Go to View 1'
+          }
+        ]
+      },
+      'view3': {
+        image: 'Artex_360/13.jpg.jpeg',
+        label: 'View 3 — Bedroom',
+        defaultPitch: 0,
+        defaultYaw: 0,
+        hotspots: [
+          {
+            pitch: 1.63,
+            yaw: -34.31,
+            targetScene: 'view2',
+            label: 'Go to View 2'
+          }
+        ]
+      }
+    }
+  },
   'tropical-sanctuary': {
     title: 'Tropical Sanctuary | Modern Luxury House',
     category: 'Residential',
@@ -529,6 +630,32 @@ function loadProjectDetails() {
   // Build stacked gallery
   const stackedGallery = document.getElementById('stackedGallery');
 
+  // ====== 360° PROJECT DETECTION ======
+  // If this project has the is360 flag, hide the normal gallery
+  // and show the 360° viewer instead.
+  if (project.is360) {
+    // Hide the standard stacked gallery container
+    const galleryContainer = document.querySelector('.stacked-gallery-container');
+    if (galleryContainer) galleryContainer.style.display = 'none';
+    // Hide the stacked-prev and stacked-next buttons
+    document.querySelectorAll('.stacked-prev, .stacked-next').forEach(b => b.style.display = 'none');
+
+    // Show the 360° tour section
+    const tour360Section = document.getElementById('tour360Section');
+    if (tour360Section) tour360Section.style.display = 'block';
+
+    // Initialize the 360 viewer after a short delay (wait for Pannellum CDN)
+    const waitForPannellum = setInterval(() => {
+      if (typeof pannellum !== 'undefined') {
+        clearInterval(waitForPannellum);
+        init360Tour(project);
+      }
+    }, 100);
+
+    return; // Skip standard gallery init
+  }
+
+  // ====== STANDARD GALLERY (for all non-360 projects) ======
   // ensure there are at least 4 images to show stacked depths by repeating if necessary
   let galleryImgs = [...project.images];
   while (galleryImgs.length > 0 && galleryImgs.length < 4) {
@@ -584,6 +711,197 @@ function updateStackedSlider() {
   });
 }
 
+/* ============================================================
+   360° VIRTUAL TOUR — Pannellum Initialization
+   ============================================================
+   This function initializes Pannellum with multi-scene support,
+   custom HTML hotspots, fade transitions, and scene nav pills.
+   ============================================================ */
+function init360Tour(project) {
+  const viewerEl = document.getElementById('tour360Viewer');
+  const loaderEl = document.getElementById('tour360Loader');
+  const fadeEl = document.getElementById('tour360Fade');
+  const sceneNavEl = document.getElementById('tour360SceneNav');
+
+  if (!viewerEl || !project.scenes) return;
+
+  const sceneIds = Object.keys(project.scenes);
+  const firstScene = 'view2';  // Default starting scene (12.jpg.jpeg — Dining Area)
+  let currentSceneId = firstScene;
+
+  // ---- Build Pannellum scene config ----
+  const pannellumScenes = {};
+
+  sceneIds.forEach(sceneId => {
+    const scene = project.scenes[sceneId];
+    const hotspots = scene.hotspots.map((hs, idx) => ({
+      /* ================================================
+         HOTSPOT COORDINATE REFERENCE:
+         pitch = vertical angle:  -90 (floor) → 0 (horizon) → +90 (ceiling)
+         yaw   = horizontal angle: -180 (behind-left) → 0 (center) → +180 (behind-right)
+         
+         To reposition a hotspot:
+           1. Change the pitch value to move it up (+) or down (-)
+           2. Change the yaw value to move it left (-) or right (+)
+           3. Save the file and refresh your browser
+         ================================================ */
+      id: `hotspot-${sceneId}-${idx}`,
+      pitch: hs.pitch,
+      yaw: hs.yaw,
+      type: 'custom',
+      // Custom HTML hotspot with pulse animation and tooltip
+      createTooltipFunc: (hotSpotDiv) => {
+        hotSpotDiv.classList.add('tour-hotspot');
+        hotSpotDiv.innerHTML = `
+          <div class="hotspot-inner">
+            <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          </div>
+          <div class="hotspot-pulse"></div>
+          <div class="hotspot-label">${hs.label}</div>
+        `;
+        hotSpotDiv.addEventListener('click', () => {
+          navigateToScene(hs.targetScene);
+        });
+      },
+      createTooltipArgs: ''
+    }));
+
+    pannellumScenes[sceneId] = {
+      type: 'equirectangular',
+      panorama: scene.image,
+      pitch: scene.defaultPitch || 0,
+      yaw: scene.defaultYaw || 0,
+      hfov: 110,
+      autoLoad: true,
+      showControls: true,
+      hotSpots: hotspots
+    };
+  });
+
+  // ---- Initialize Pannellum Viewer ----
+  const viewer = pannellum.viewer('tour360Viewer', {
+    default: {
+      firstScene: firstScene,
+      autoLoad: true,
+      showZoomCtrl: true,
+      showFullscreenCtrl: true,
+      compass: false,
+      mouseZoom: true,
+      draggable: true,
+      friction: 0.15,
+      minHfov: 50,
+      maxHfov: 120,
+      autoRotate: -1.5,       // Gentle auto-rotate (negative = clockwise)
+      autoRotateInactivityDelay: 5000,  // Start auto-rotate after 5s idle
+      sceneFadeDuration: 1200  // Smooth crossfade transition between scenes (ms)
+    },
+    scenes: pannellumScenes
+  });
+
+  // ---- Hide loading overlay when first scene loads ----
+  viewer.on('load', () => {
+    if (loaderEl) loaderEl.classList.add('hidden');
+  });
+
+  // ---- Scene Navigation with Fade Transition ----
+  function navigateToScene(targetSceneId) {
+    if (targetSceneId === currentSceneId) return;
+
+    // Fade to black
+    if (fadeEl) fadeEl.classList.add('active');
+
+    setTimeout(() => {
+      // Switch scene while screen is black
+      viewer.loadScene(targetSceneId);
+      currentSceneId = targetSceneId;
+      updateSceneNav(targetSceneId);
+
+      // Fade back in
+      setTimeout(() => {
+        if (fadeEl) fadeEl.classList.remove('active');
+      }, 300);
+    }, 400);
+  }
+
+  // ---- Build Scene Navigation Pills ----
+  function buildSceneNav() {
+    if (!sceneNavEl) return;
+    sceneNavEl.innerHTML = '';
+
+    sceneIds.forEach(sceneId => {
+      const scene = project.scenes[sceneId];
+      const btn = document.createElement('button');
+      btn.className = 'tour-scene-btn' + (sceneId === firstScene ? ' active' : '');
+      btn.textContent = scene.label;
+      btn.setAttribute('data-scene', sceneId);
+      btn.addEventListener('click', () => navigateToScene(sceneId));
+      sceneNavEl.appendChild(btn);
+    });
+  }
+
+  function updateSceneNav(activeId) {
+    if (!sceneNavEl) return;
+    sceneNavEl.querySelectorAll('.tour-scene-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.getAttribute('data-scene') === activeId);
+    });
+  }
+
+  buildSceneNav();
+
+  // Expose viewer to console for debugging hotspot positions
+  // Usage: In browser console, type: window.tour360Viewer.getYaw() / .getPitch()
+  window.tour360Viewer = viewer;
+
+  /* ============================================================
+     TEMPORARY: Coordinate Helper Tool
+     ============================================================
+     Adds a center crosshair and a live pitch/yaw readout to the
+     viewer so you can visually aim at a door/pathway and read
+     the exact coordinates to use in the hotspot config above.
+
+     >>> DELETE THIS ENTIRE BLOCK once your hotspots are placed <<<
+     ============================================================ */
+  (function initCoordHelper() {
+    // --- Crosshair in the center of the viewer ---
+    const crosshair = document.createElement('div');
+    crosshair.className = 'coord-crosshair';
+    crosshair.textContent = '+';
+    viewerEl.appendChild(crosshair);
+
+    // --- Floating readout box (top-left corner) ---
+    const readout = document.createElement('div');
+    readout.className = 'coord-readout';
+    readout.innerHTML = `
+      <div class="coord-title">◈ Hotspot Coordinate Helper</div>
+      <div class="coord-row">
+        <span class="coord-label">Pitch</span>
+        <span class="coord-value" id="coordPitch">0.00</span>
+      </div>
+      <div class="coord-row">
+        <span class="coord-label">Yaw</span>
+        <span class="coord-value" id="coordYaw">0.00</span>
+      </div>
+      <div class="coord-hint">Aim center at a door → copy values to script.js</div>
+    `;
+    viewerEl.appendChild(readout);
+
+    const pitchEl = document.getElementById('coordPitch');
+    const yawEl = document.getElementById('coordYaw');
+
+    // --- Live update loop (runs every frame) ---
+    function updateCoords() {
+      try {
+        const p = viewer.getPitch();
+        const y = viewer.getYaw();
+        if (pitchEl) pitchEl.textContent = p.toFixed(2);
+        if (yawEl) yawEl.textContent = y.toFixed(2);
+      } catch (e) { /* viewer not ready yet */ }
+      requestAnimationFrame(updateCoords);
+    }
+    requestAnimationFrame(updateCoords);
+  })();
+}
+
 // ========== Before/After Slider ==========
 function initBeforeAfter(container) {
   const handle = container.querySelector('.slider-handle');
@@ -630,7 +948,7 @@ function initBeforeAfter(container) {
 }
 
 // ========== EmailJS Contact Form ==========
-(function(){
+(function () {
   if (typeof emailjs !== 'undefined') {
     emailjs.init("Y34sRSIRx2hHdGBgv");
   }
@@ -661,7 +979,7 @@ function initContactForm() {
   }
 
   // Block any native form submission entirely
-  form.addEventListener('submit', function(e) {
+  form.addEventListener('submit', function (e) {
     e.preventDefault();
     e.stopPropagation();
     return false;
@@ -680,22 +998,22 @@ function initContactForm() {
 
   var validators = {
     name: {
-      test: function(v) { return /^[A-Za-z\s\u0600-\u06FF]{2,}$/.test(v.trim()); },
+      test: function (v) { return /^[A-Za-z\s\u0600-\u06FF]{2,}$/.test(v.trim()); },
       msg: 'Please enter a valid name (letters only, at least 2 characters)'
     },
     phone: {
-      test: function(v) { 
+      test: function (v) {
         if (iti) return iti.isValidNumber();
-        return /^[\+]?[0-9\s]{7,15}$/.test(v.trim()); 
+        return /^[\+]?[0-9\s]{7,15}$/.test(v.trim());
       },
       msg: 'Please enter a valid phone number for your country'
     },
     email: {
-      test: function(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim()); },
+      test: function (v) { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim()); },
       msg: 'Please enter a valid email address'
     },
     message: {
-      test: function(v) { return v.trim().length >= 10; },
+      test: function (v) { return v.trim().length >= 10; },
       msg: 'Please enter at least 10 characters'
     }
   };
@@ -717,23 +1035,23 @@ function initContactForm() {
   }
 
   // Clear errors on input
-  fieldIds.forEach(function(id) {
+  fieldIds.forEach(function (id) {
     var el = document.getElementById(id);
     if (el) {
-      el.addEventListener('input', function() { clearError(id); });
+      el.addEventListener('input', function () { clearError(id); });
     }
   });
 
   // Restrict phone to digits, spaces, and +
   var phoneField = document.getElementById('phone');
   if (phoneField) {
-    phoneField.addEventListener('input', function(e) {
+    phoneField.addEventListener('input', function (e) {
       e.target.value = e.target.value.replace(/[^0-9+\s]/g, '');
     });
   }
 
   // SEND button click — validate FIRST, send ONLY if valid
-  sendBtn.addEventListener('click', function() {
+  sendBtn.addEventListener('click', function () {
     var isValid = true;
     var firstInvalid = null;
 
@@ -769,13 +1087,13 @@ function initContactForm() {
       }
 
       emailjs.sendForm('service_gwypcmm', 'template_zwzs3x3', form)
-        .then(function() {
+        .then(function () {
           sendBtn.textContent = '✓ Message Sent!';
           sendBtn.style.background = '#25D366';
           sendBtn.style.borderColor = '#25D366';
           sendBtn.style.color = '#fff';
 
-          setTimeout(function() {
+          setTimeout(function () {
             sendBtn.textContent = 'Send Message';
             sendBtn.style.background = '';
             sendBtn.style.borderColor = '';
@@ -784,13 +1102,13 @@ function initContactForm() {
             form.reset();
           }, 3000);
         })
-        .catch(function() {
+        .catch(function () {
           sendBtn.textContent = 'Error! Try Again';
           sendBtn.style.background = '#ff4d4d';
           sendBtn.style.borderColor = '#ff4d4d';
           sendBtn.style.color = '#fff';
 
-          setTimeout(function() {
+          setTimeout(function () {
             sendBtn.textContent = 'Send Message';
             sendBtn.style.background = '';
             sendBtn.style.borderColor = '';
@@ -812,7 +1130,7 @@ if (document.readyState === 'loading') {
 }
 
 // ========== Fullscreen Lightbox ==========
-(function() {
+(function () {
   // Wait for DOM and project to load
   const initLightbox = () => {
     const overlay = document.getElementById('lightboxOverlay');
@@ -826,13 +1144,13 @@ if (document.readyState === 'loading') {
 
     let currentImages = [];
     let currentIndex = 0;
-    
+
     // Use exactly 2 nodes for crossfading to save massive GPU memory
     let slideA = document.createElement('img');
     let slideB = document.createElement('img');
     wrapper.appendChild(slideA);
     wrapper.appendChild(slideB);
-    
+
     let activeSlide = slideA;
     let inactiveSlide = slideB;
 
@@ -856,7 +1174,7 @@ if (document.readyState === 'loading') {
     function openLightbox(images, index) {
       currentImages = images;
       currentIndex = index;
-      
+
       showSpinner();
       activeSlide.onload = hideSpinner;
       activeSlide.src = images[currentIndex];
@@ -877,33 +1195,33 @@ if (document.readyState === 'loading') {
     function closeLightbox() {
       overlay.classList.remove('active');
       document.body.style.overflow = '';
-      setTimeout(() => { 
-        activeSlide.src = ''; 
+      setTimeout(() => {
+        activeSlide.src = '';
         inactiveSlide.src = '';
         activeSlide.classList.remove('active');
-      }, 400); 
+      }, 400);
     }
 
     function navigate(direction) {
       if (currentImages.length === 0) return;
-      
+
       currentIndex = (currentIndex + direction + currentImages.length) % currentImages.length;
-      
+
       // Setup the hidden slide with new image before fading in
       showSpinner();
       inactiveSlide.onload = hideSpinner;
       inactiveSlide.src = currentImages[currentIndex];
       inactiveSlide.decoding = 'async';
-      
+
       // Triggers immediate CSS crossfade 
       inactiveSlide.classList.add('active');
       activeSlide.classList.remove('active');
-      
+
       // Swap references
       const temp = activeSlide;
       activeSlide = inactiveSlide;
       inactiveSlide = temp;
-      
+
       counter.textContent = `${currentIndex + 1} / ${currentImages.length}`;
       preloadImage(currentImages[(currentIndex + direction + currentImages.length) % currentImages.length]);
     }
