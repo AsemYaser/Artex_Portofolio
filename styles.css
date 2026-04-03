@@ -786,16 +786,24 @@ body.dark-mode .header.dark .logo .logo-text {
   z-index: 0;
 }
 
+@keyframes heroBreathing {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.08);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
 .hero-bg img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transform: scale(1.05);
-  transition: transform 8s ease-out;
-}
-
-.hero.loaded .hero-bg img {
-  transform: scale(1);
+  transform-origin: center center;
+  animation: heroBreathing 24s ease-in-out infinite;
 }
 
 .hero-overlay {
@@ -2663,53 +2671,126 @@ body.dark-mode .header.dark .logo .logo-text {
   box-shadow: 0 4px 15px rgba(193, 157, 95, 0.3);
 }
 
-/* --- Pannellum Dark/Gold Theme Overrides --- */
+/* --- Pannellum Dark/Gold Theme Overrides (Heavy Hand Approach) --- */
+
+/* 1. Spatial Separation & Positioning */
+
+/* Crush the main container to let absolute positioning dominate */
 .tour-360-container .pnlm-controls-container {
-  top: 12px !important;
-  left: auto !important;
-  right: 12px !important;
+  display: block !important; 
+  width: 100% !important;
+  height: 100% !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  pointer-events: none !important;
+  background: transparent !important;
 }
 
-.tour-360-container .pnlm-zoom-controls,
+/* Force absolute position for fullscreen button */
 .tour-360-container .pnlm-fullscreen-toggle-button {
-  background: rgba(18, 18, 18, 0.7) !important;
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
-  border-radius: 8px !important;
-  backdrop-filter: blur(10px) !important;
+  position: absolute !important;
+  top: 20px !important;
+  right: 20px !important;
+  z-index: 10 !important;
+  margin: 0 !important;
+  pointer-events: auto !important;
 }
 
-.tour-360-container .pnlm-zoom-in,
-.tour-360-container .pnlm-zoom-out {
-  background-color: rgba(18, 18, 18, 0.7) !important;
+/* Force absolute position for zoom controls container */
+.tour-360-container .pnlm-zoom-controls {
+  position: absolute !important;
+  top: 80px !important;
+  right: 20px !important;
+  z-index: 10 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 15px !important;
+  width: auto !important;
+  height: auto !important;
+  background: transparent !important;
   border: none !important;
-  border-radius: 8px !important;
-  width: 36px !important;
-  height: 36px !important;
-  color: #e0e0e0 !important;
-  font-size: 18px !important;
-  line-height: 36px !important;
-  transition: background 0.2s ease;
+  margin: 0 !important;
+  pointer-events: auto !important;
 }
 
-.tour-360-container .pnlm-zoom-in:hover,
-.tour-360-container .pnlm-zoom-out:hover {
-  background-color: rgba(193, 157, 95, 0.3) !important;
-  color: var(--color-gold) !important;
-}
-
+/* 2. High-End UI Redesign: Dimensions, Shape & Glow, Background */
+.tour-360-container .pnlm-zoom-in,
+.tour-360-container .pnlm-zoom-out,
 .tour-360-container .pnlm-fullscreen-toggle-button {
-  width: 36px !important;
-  height: 36px !important;
+  position: static !important; /* CRITICAL: break them out of default absolute positioning */
+  width: 44px !important;
+  height: 44px !important;
+  background-color: rgba(30, 30, 30, 0.8) !important;
+  background-image: none !important; /* Hide default background sprites */
+  border-radius: 50% !important;
+  border: 1px solid rgba(212, 175, 55, 0.3) !important; /* Artex Gold border */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4) !important;
+  margin: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: all 0.3s ease !important;
+  backdrop-filter: blur(8px) !important;
+  cursor: pointer !important;
 }
 
-.tour-360-container .pnlm-about-msg {
-  display: none !important;
+/* Fullscreen Button needs absolute positioning */
+.tour-360-container .pnlm-fullscreen-toggle-button {
+  position: absolute !important;
 }
 
-.tour-360-container .pnlm-load-box {
-  display: none !important;
+/* Hover States */
+.tour-360-container .pnlm-zoom-in:hover,
+.tour-360-container .pnlm-zoom-out:hover,
+.tour-360-container .pnlm-fullscreen-toggle-button:hover {
+  background-color: rgba(212, 175, 55, 0.15) !important;
+  border-color: #D4AF37 !important;
+  transform: scale(1.1) !important;
+  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.3) !important;
 }
 
+/* 3. Icons Redesign utilizing Webkit Mask for exact recoloring */
+.tour-360-container .pnlm-zoom-in::before,
+.tour-360-container .pnlm-zoom-out::before,
+.tour-360-container .pnlm-fullscreen-toggle-button::before {
+  content: '' !important;
+  display: block !important;
+  background-color: #D4AF37 !important; /* Force true Artex Gold */
+  transition: background-color 0.3s ease !important;
+}
+
+.tour-360-container .pnlm-zoom-in::before {
+  width: 16px !important;
+  height: 16px !important;
+  -webkit-mask: url('data:image/svg+xml;utf8,<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2h6z"/></svg>') center/contain no-repeat !important;
+  mask: url('data:image/svg+xml;utf8,<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2h6z"/></svg>') center/contain no-repeat !important;
+}
+
+.tour-360-container .pnlm-zoom-out::before {
+  width: 14px !important;
+  height: 14px !important;
+  -webkit-mask: url('data:image/svg+xml;utf8,<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M5 11h14v2H5z"/></svg>') center/contain no-repeat !important;
+  mask: url('data:image/svg+xml;utf8,<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M5 11h14v2H5z"/></svg>') center/contain no-repeat !important;
+}
+
+.tour-360-container .pnlm-fullscreen-toggle-button::before {
+  width: 16px !important;
+  height: 16px !important;
+  -webkit-mask: url('data:image/svg+xml;utf8,<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>') center/contain no-repeat !important;
+  mask: url('data:image/svg+xml;utf8,<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>') center/contain no-repeat !important;
+}
+
+/* Hover icon color */
+.tour-360-container .pnlm-zoom-in:hover::before,
+.tour-360-container .pnlm-zoom-out:hover::before,
+.tour-360-container .pnlm-fullscreen-toggle-button:hover::before {
+  background-color: #fff !important;
+}
+
+/* Hide unused Pannellum elements */
+.tour-360-container .pnlm-about-msg,
+.tour-360-container .pnlm-load-box,
 .tour-360-container .pnlm-compass {
   display: none !important;
 }
@@ -2719,7 +2800,9 @@ body.dark-mode .header.dark .logo .logo-text {
   width: 40px;
   height: 40px;
   cursor: pointer;
-  position: relative;
+  position: absolute !important;
+  margin-top: -20px !important;
+  margin-left: -20px !important;
 }
 
 .tour-hotspot .hotspot-inner {
@@ -2814,6 +2897,40 @@ body.dark-mode .header.dark .logo .logo-text {
   margin: 0;
 }
 
+.btn-direct-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(212, 175, 55, 0.1);
+  border: 1px solid var(--color-gold);
+  color: var(--color-gold);
+  font-family: var(--font-body);
+  font-size: 0.55rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 6px 14px;
+  border-radius: 20px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.btn-direct-link:hover {
+  background: var(--color-gold);
+  color: #fff;
+  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+}
+
+.btn-direct-link svg {
+  width: 14px;
+  height: 14px;
+  transition: transform 0.3s ease;
+}
+
+.btn-direct-link:hover svg {
+  transform: translateX(2px) translateY(-2px);
+}
+
 .tour-360-header .tour-instructions {
   font-family: var(--font-body);
   font-size: 0.65rem;
@@ -2881,80 +2998,4 @@ body.dark-mode .header.dark .logo .logo-text {
   }
 }
 
-/* ============================================
-   TEMPORARY: Coordinate Helper Tool
-   Remove these styles once hotspots are placed
-   ============================================ */
 
-/* Center crosshair */
-.coord-crosshair {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 200;
-  pointer-events: none;
-  color: rgba(255, 255, 255, 0.85);
-  font-size: 28px;
-  font-weight: 300;
-  line-height: 1;
-  text-shadow: 0 0 6px rgba(0,0,0,0.9), 0 0 2px rgba(0,0,0,0.7);
-  font-family: monospace;
-}
-
-/* Live coordinate readout box */
-.coord-readout {
-  position: absolute;
-  top: 14px;
-  left: 14px;
-  z-index: 200;
-  background: rgba(0, 0, 0, 0.75);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(193, 157, 95, 0.4);
-  border-radius: 10px;
-  padding: 12px 18px;
-  pointer-events: none;
-  font-family: 'Courier New', monospace;
-  min-width: 220px;
-}
-
-.coord-readout .coord-title {
-  font-size: 0.55rem;
-  font-weight: 700;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--color-gold);
-  margin-bottom: 8px;
-  font-family: var(--font-body);
-}
-
-.coord-readout .coord-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 3px 0;
-}
-
-.coord-readout .coord-label {
-  font-size: 0.7rem;
-  color: #888;
-  font-weight: 400;
-}
-
-.coord-readout .coord-value {
-  font-size: 0.85rem;
-  color: #fff;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-}
-
-.coord-readout .coord-hint {
-  margin-top: 8px;
-  padding-top: 8px;
-  border-top: 1px solid rgba(255,255,255,0.08);
-  font-size: 0.5rem;
-  color: #666;
-  letter-spacing: 0.06em;
-  font-family: var(--font-body);
-  text-transform: uppercase;
-}

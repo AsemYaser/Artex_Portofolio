@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>360° Virtual Tour — Artex Designs</title>
+    <!-- Pannellum 360° Viewer CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js"></script>
+    <style>
+        /* Global Reset for Standalone Tour */
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #000;
+        }
+
+        /* Override the original container constraints for true fullscreen */
+        .tour-360-container {
+            width: 100% !important;
+            height: 100% !important;
+            aspect-ratio: auto !important;
+            border-radius: 0 !important;
+            border: none !important;
+            box-shadow: none !important;
+        }
+
+        .tour-360-wrapper {
+            margin: 0 !important;
+            width: 100%;
+            height: 100%;
+        }
+
+        .tour-fade {
+            position: absolute;
+            inset: 0;
+            z-index: 50;
+            background: #000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+
+        .tour-fade.active {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="tour-360-wrapper">
+        <div class="tour-360-container" id="tour360Viewer"></div>
+        <div class="tour-fade" id="tour360Fade"></div>
+    </div>
+
+    <script>
+        // Extract project scenes config from script.js perfectly
+        const projectScenes = {
+            'view1': {
+                image: 'Artex_360/opt_11.jpg',
+                label: 'View 1 — Living Area',
+                defaultPitch: 0,
+                defaultYaw: 0,
+                hotspots: [
+                    { pitch: -2.05, yaw: 4.40, targetScene: 'view3', label: 'Go to View 3' },
+                    { pitch: 0.03, yaw: 40.40, targetScene: 'view2', label: 'Go to View 2' }
+                ]
+            },
+            'view2': {
+                image: 'Artex_360/opt_12.jpg',
+                label: 'View 2 — Dining Area',
+                defaultPitch: 0,
+                defaultYaw: 0,
+                hotspots: [
+                    { pitch: -1.22, yaw: -157.24, targetScene: 'view3', label: 'Go to View 3' },
+                    { pitch: -8.42, yaw: 158.88, targetScene: 'view1', label: 'Go to View 1' }
+                ]
+            },
+            'view3': {
+                image: 'Artex_360/opt_13.jpg',
+                label: 'View 3 — Bedroom',
+                defaultPitch: 0,
+                defaultYaw: 0,
+                hotspots: [
+                    { pitch: 1.63, yaw: -34.31, targetScene: 'view2', label: 'Go to View 2' }
+                ]
+            }
+        };
+
+        const sceneIds = Object.keys(projectScenes);
+        const firstScene = 'view2';
+        let currentSceneId = firstScene;
+        const pannellumScenes = {};
+        const fadeEl = document.getElementById('tour360Fade');
+
+        function navigateToScene(targetSceneId) {
+            if (targetSceneId === currentSceneId) return;
+            if (fadeEl) fadeEl.classList.add('active');
+            
+            setTimeout(() => {
+                viewer.loadScene(targetSceneId);
+                currentSceneId = targetSceneId;
+                setTimeout(() => {
+                    if (fadeEl) fadeEl.classList.remove('active');
+                }, 300);
+            }, 400);
+        }
+
+        sceneIds.forEach(sceneId => {
+            const scene = projectScenes[sceneId];
+            const pnlmHotspots = scene.hotspots.map((hs, idx) => ({
+                id: `hotspot-${sceneId}-${idx}`,
+                pitch: hs.pitch,
+                yaw: hs.yaw,
+                type: 'custom',
+                cssClass: 'tour-hotspot pnlm-tooltip pnlm-info',
+                createTooltipFunc: (hotSpotDiv) => {
+                    hotSpotDiv.innerHTML = `
+                      <div class="hotspot-inner">
+                        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                      </div>
+                      <div class="hotspot-pulse"></div>
+                      <div class="hotspot-label">${hs.label}</div>
+                    `;
+                    // Ensure the click event takes precedence
+                    hotSpotDiv.addEventListener('pointerup', (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        navigateToScene(hs.targetScene);
+                    });
+                    hotSpotDiv.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        navigateToScene(hs.targetScene);
+                    });
+                },
+                createTooltipArgs: ''
+            }));
+
+            pannellumScenes[sceneId] = {
+                type: 'equirectangular',
+                panorama: scene.image,
+                pitch: scene.defaultPitch || 0,
+                yaw: scene.defaultYaw || 0,
+                hfov: 110,
+                autoLoad: true,
+                showControls: true,
+                hotSpots: pnlmHotspots
+            };
+        });
+
+        const viewer = pannellum.viewer('tour360Viewer', {
+            default: {
+                firstScene: firstScene,
+                autoLoad: true,
+                showZoomCtrl: true,
+                showFullscreenCtrl: true,
+                compass: false,
+                mouseZoom: true,
+                draggable: true,
+                friction: 0.15,
+                minHfov: 50,
+                maxHfov: 120,
+                autoRotate: -1.5,
+                autoRotateInactivityDelay: 5000,
+                sceneFadeDuration: 1200
+            },
+            scenes: pannellumScenes
+        });
+    </script>
+</body>
+</html>

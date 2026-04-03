@@ -229,22 +229,11 @@ const projects = {
       'view1': {
         image: 'Artex_360/opt_11.jpg',
         label: 'View 1 — Living Area',
-        // Initial camera orientation when this scene loads:
-        defaultPitch: 0,    // 0 = looking at the horizon
-        defaultYaw: 0,      // 0 = center of the equirectangular image
+        defaultPitch: 0,
+        defaultYaw: 0,
         hotspots: [
-          {
-            pitch: -2.05,
-            yaw: 4.40,
-            targetScene: 'view3',
-            label: 'Go to View 3'
-          },
-          {
-            pitch: 0.03,
-            yaw: 40.40,
-            targetScene: 'view2',
-            label: 'Go to View 2'
-          }
+          { pitch: -2.05, yaw: 4.40, targetScene: 'view3', label: 'Go to View 3' },
+          { pitch: 0.03, yaw: 40.40, targetScene: 'view2', label: 'Go to View 2' }
         ]
       },
       'view2': {
@@ -253,18 +242,8 @@ const projects = {
         defaultPitch: 0,
         defaultYaw: 0,
         hotspots: [
-          {
-            pitch: -1.22,
-            yaw: -157.24,    // Points back toward View 1
-            targetScene: 'view3',
-            label: 'Go to View 3'
-          },
-          {
-            pitch: -8.42,
-            yaw: 158.88,     // Points toward View 3
-            targetScene: 'view1',
-            label: 'Go to View 1'
-          }
+          { pitch: -1.22, yaw: -157.24, targetScene: 'view3', label: 'Go to View 3' },
+          { pitch: -8.42, yaw: 158.88, targetScene: 'view1', label: 'Go to View 1' }
         ]
       },
       'view3': {
@@ -273,12 +252,7 @@ const projects = {
         defaultPitch: 0,
         defaultYaw: 0,
         hotspots: [
-          {
-            pitch: 1.63,
-            yaw: -34.31,
-            targetScene: 'view2',
-            label: 'Go to View 2'
-          }
+          { pitch: 1.63, yaw: -34.31, targetScene: 'view2', label: 'Go to View 2' }
         ]
       }
     }
