@@ -170,6 +170,24 @@
             },
             scenes: pannellumScenes
         });
+
+        // MOBILE FIX: Ensure the fullscreen icon is always visible for premium consistency
+        viewer.on('load', () => {
+            const container = document.querySelector('.pnlm-controls-container');
+            const fsBtn = document.querySelector('.pnlm-fullscreen-toggle-button');
+            if (container && (!fsBtn || window.getComputedStyle(fsBtn).display === 'none')) {
+                if (fsBtn) fsBtn.remove();
+                const customFsBtn = document.createElement('div');
+                customFsBtn.className = 'pnlm-fullscreen-toggle-button pnlm-sprite pnlm-controls pnlm-control';
+                customFsBtn.addEventListener('click', () => {
+                    const el = document.documentElement;
+                    if (el.requestFullscreen) el.requestFullscreen();
+                    else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+                    else if (el.msRequestFullscreen) el.msRequestFullscreen();
+                });
+                container.appendChild(customFsBtn);
+            }
+        });
     </script>
 </body>
 </html>

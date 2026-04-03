@@ -772,9 +772,31 @@ function init360Tour(project) {
     scenes: pannellumScenes
   });
 
-  // ---- Hide loading overlay when first scene loads ----
+  // ---- Hide loading overlay & Fullscreen Fallback for iPhone ----
   viewer.on('load', () => {
     if (loaderEl) loaderEl.classList.add('hidden');
+
+    // MOBILE FIX: If Pannellum hides the fullscreen button (common on iPhone), 
+    // manually inject a custom one that opens the standalone full-page tour.
+    const container = viewerEl.querySelector('.pnlm-controls-container');
+    const existingFsBtn = viewerEl.querySelector('.pnlm-fullscreen-toggle-button');
+
+    if (container && (!existingFsBtn || window.getComputedStyle(existingFsBtn).display === 'none')) {
+      // Remove partially hidden button if it exists to avoid duplicates
+      if (existingFsBtn) existingFsBtn.remove();
+
+      const customFsBtn = document.createElement('div');
+      customFsBtn.className = 'pnlm-fullscreen-toggle-button pnlm-sprite pnlm-controls pnlm-control';
+      customFsBtn.setAttribute('title', 'Open Fullscreen Tour');
+      
+      customFsBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        window.open('standalone-tour.html', '_blank');
+      });
+      
+      container.appendChild(customFsBtn);
+    }
   });
 
   // ---- Scene Navigation with Fade Transition ----

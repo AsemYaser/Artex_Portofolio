@@ -2689,6 +2689,7 @@ body.dark-mode .header.dark .logo .logo-text {
 
 /* Force absolute position for fullscreen button */
 .tour-360-container .pnlm-fullscreen-toggle-button {
+  display: flex !important; /* Force it even if library hides it */
   position: absolute !important;
   top: 20px !important;
   right: 20px !important;
@@ -2788,10 +2789,12 @@ body.dark-mode .header.dark .logo .logo-text {
   background-color: #fff !important;
 }
 
-/* Hide unused Pannellum elements */
+/* Hide unused Pannellum elements aggressively */
 .tour-360-container .pnlm-about-msg,
 .tour-360-container .pnlm-load-box,
-.tour-360-container .pnlm-compass {
+.tour-360-container .pnlm-compass,
+.tour-360-container .pnlm-compass-container,
+.pnlm-compass {
   display: none !important;
 }
 
