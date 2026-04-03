@@ -2568,6 +2568,10 @@ body.dark-mode .header.dark .logo .logo-text {
   overflow: hidden;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
   border: 1px solid rgba(255, 255, 255, 0.08);
+  /* PREVENT FRAME DROPS: Isolate 360 viewer rendering from the rest of the page layout */
+  contain: strict;
+  content-visibility: auto;
+  contain-intrinsic-size: 100% 56.25vw; /* Approximates 16:9 aspect ratio while off-screen */
 }
 
 .tour-360-container .pnlm-container {

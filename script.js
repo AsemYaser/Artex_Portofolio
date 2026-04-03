@@ -616,15 +616,31 @@ function loadProjectDetails() {
 
     // Show the 360° tour section
     const tour360Section = document.getElementById('tour360Section');
-    if (tour360Section) tour360Section.style.display = 'block';
+    if (tour360Section) {
+      tour360Section.style.display = 'block';
 
-    // Initialize the 360 viewer after a short delay (wait for Pannellum CDN)
-    const waitForPannellum = setInterval(() => {
-      if (typeof pannellum !== 'undefined') {
-        clearInterval(waitForPannellum);
-        init360Tour(project);
-      }
-    }, 100);
+      // LAZY INITIALIZATION: Only start Pannellum when its container enters the viewport
+      // This prevents frame drops and "bad renders" while the user is still scrolling at the top.
+      const tourObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            // Initialize the 360 viewer after a short delay (wait for Pannellum CDN)
+            const waitForPannellum = setInterval(() => {
+              if (typeof pannellum !== 'undefined') {
+                clearInterval(waitForPannellum);
+                init360Tour(project);
+              }
+            }, 100);
+            tourObserver.unobserve(entry.target);
+          }
+        });
+      }, { 
+        threshold: 0.05, 
+        rootMargin: '150px' // Start loading just before it comes into view for a seamless experience
+      });
+
+      tourObserver.observe(tour360Section);
+    }
 
     return; // Skip standard gallery init
   }
