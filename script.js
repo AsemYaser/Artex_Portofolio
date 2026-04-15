@@ -183,6 +183,120 @@ document.addEventListener('DOMContentLoaded', () => {
 // ========== Project Data ==========
 const projects = {
   /* ============================================================
+     ABDO HAMAM 360° VIRTUAL TOUR
+     ============================================================ */
+  'abdo-hamam-360': {
+    title: 'Abdo Hamam | 360° Virtual Tour',
+    category: 'Virtual Tour',
+    style: 'Interactive Experience',
+    year: '2026',
+    client: 'Abdo Hamam',
+    heroImg: 'Abdo_Hamam_360/reception & dining.jpg',
+    images: ['Abdo_Hamam_360/reception & dining.jpg'],
+    is360: true,
+    desc1: 'Step inside the Abdo Hamam project through a fully immersive 360° virtual tour. Experience the carefully curated spaces, from the elegant reception and dining area to the intricate details of the master bedroom and bathrooms. Navigate dynamically using interactive hotspots and explore every angle.',
+    desc2: 'This virtual presentation offers an authentic, realistic view of the final render, allowing you to walk through the living spaces, kitchen, and private rooms seamlessly.',
+    scenes: {
+      'reception': {
+        image: 'Abdo_Hamam_360/reception & dining.jpg',
+        label: 'Reception & Dining',
+        defaultPitch: 0,
+        defaultYaw: 0,
+        hotspots: [
+          { pitch: 0, yaw: 20, targetScene: 'living', label: 'Go to Living Area' },
+          { pitch: 0, yaw: 40, targetScene: 'kitchen', label: 'Go to Kitchen' },
+          { pitch: 0, yaw: 60, targetScene: 'masterbed', label: 'Go to Master Bedroom' },
+          { pitch: 0, yaw: 80, targetScene: 'kids1', label: 'Go to Kids Room 1' },
+          { pitch: 0, yaw: 100, targetScene: 'mainbath', label: 'Go to Main Bathroom' },
+          { pitch: 0, yaw: 120, targetScene: 'laundry', label: 'Go to Laundry' }
+        ]
+      },
+      'living': {
+        image: 'Abdo_Hamam_360/living.jpg',
+        label: 'Living Area',
+        defaultPitch: 0,
+        defaultYaw: 0,
+        hotspots: [{ pitch: 0, yaw: -20, targetScene: 'reception', label: 'Back to Reception & Dining' }]
+      },
+      'kitchen': {
+        image: 'Abdo_Hamam_360/kitchen.jpg',
+        label: 'Kitchen',
+        defaultPitch: 0,
+        defaultYaw: 0,
+        hotspots: [
+          { pitch: 0, yaw: 0, targetScene: 'kitchen2', label: 'Go to Kitchen 2' },
+          { pitch: 0, yaw: -40, targetScene: 'reception', label: 'Back to Reception & Dining' }
+        ]
+      },
+      'kitchen2': {
+        image: 'Abdo_Hamam_360/kitchen 2.jpg',
+        label: 'Kitchen 2',
+        defaultPitch: 0,
+        defaultYaw: 0,
+        hotspots: [{ pitch: 0, yaw: 180, targetScene: 'kitchen', label: 'Back to Kitchen 1' }]
+      },
+      'masterbed': {
+        image: 'Abdo_Hamam_360/master bedroom.jpg',
+        label: 'Master Bedroom',
+        defaultPitch: 0,
+        defaultYaw: 0,
+        hotspots: [
+          { pitch: 0, yaw: 20, targetScene: 'masterdressing', label: 'Go to Master Dressing' },
+          { pitch: 0, yaw: -60, targetScene: 'reception', label: 'Back to Reception & Dining' }
+        ]
+      },
+      'masterdressing': {
+        image: 'Abdo_Hamam_360/master bedroom dressing.jpg',
+        label: 'Master Dressing',
+        defaultPitch: 0,
+        defaultYaw: 0,
+        hotspots: [
+          { pitch: 0, yaw: 20, targetScene: 'masterbath', label: 'Go to Master Bathroom' },
+          { pitch: 0, yaw: 180, targetScene: 'masterbed', label: 'Back to Master Bedroom' }
+        ]
+      },
+      'masterbath': {
+        image: 'Abdo_Hamam_360/master bathroom.jpg',
+        label: 'Master Bathroom',
+        defaultPitch: 0,
+        defaultYaw: 0,
+        hotspots: [{ pitch: 0, yaw: 180, targetScene: 'masterdressing', label: 'Back to Master Dressing' }]
+      },
+      'kids1': {
+        image: 'Abdo_Hamam_360/kids 1.jpg',
+        label: 'Kids Room 1',
+        defaultPitch: 0,
+        defaultYaw: 0,
+        hotspots: [
+          { pitch: 0, yaw: 20, targetScene: 'kids2', label: 'Go to Kids Room 2' },
+          { pitch: 0, yaw: -80, targetScene: 'reception', label: 'Back to Reception & Dining' }
+        ]
+      },
+      'kids2': {
+        image: 'Abdo_Hamam_360/kids 2.jpeg',
+        label: 'Kids Room 2',
+        defaultPitch: 0,
+        defaultYaw: 0,
+        hotspots: [{ pitch: 0, yaw: 180, targetScene: 'kids1', label: 'Back to Kids Room 1' }]
+      },
+      'mainbath': {
+        image: 'Abdo_Hamam_360/main bathroom.jpg',
+        label: 'Main Bathroom',
+        defaultPitch: 0,
+        defaultYaw: 0,
+        hotspots: [{ pitch: 0, yaw: -100, targetScene: 'reception', label: 'Back to Reception & Dining' }]
+      },
+      'laundry': {
+        image: 'Abdo_Hamam_360/laundry.jpeg',
+        label: 'Laundry',
+        defaultPitch: 0,
+        defaultYaw: 0,
+        hotspots: [{ pitch: 0, yaw: -120, targetScene: 'reception', label: 'Back to Reception & Dining' }]
+      }
+    }
+  },
+  /* ============================================================
+>>>>>>> 0ba18c50d8ccd64c1f0476b82475b741faf8b7aa
      360° VIRTUAL TOUR PROJECT
      ------------------------------------------------------------ 
      This project uses the is360 flag to trigger the Pannellum
@@ -604,6 +718,13 @@ function loadProjectDetails() {
   // Build stacked gallery
   const stackedGallery = document.getElementById('stackedGallery');
 
+  // Update the standalone tour link
+  const tourDirectLinks = document.querySelectorAll('.btn-direct-link');
+  tourDirectLinks.forEach(link => {
+    link.href = 'standalone-tour.html?project=' + projectId;
+  });
+
+
   // ====== 360° PROJECT DETECTION ======
   // If this project has the is360 flag, hide the normal gallery
   // and show the 360° viewer instead.
@@ -716,7 +837,8 @@ function init360Tour(project) {
   if (!viewerEl || !project.scenes) return;
 
   const sceneIds = Object.keys(project.scenes);
-  const firstScene = 'view2';  // Default starting scene (opt_12.jpg — Dining Area)
+  const firstScene = sceneIds[0];  // Default starting scene
+
   let currentSceneId = firstScene;
 
   // ---- Build Pannellum scene config ----
@@ -808,7 +930,9 @@ function init360Tour(project) {
       customFsBtn.addEventListener('click', (e) => {
         e.preventDefault();
         e.stopPropagation();
-        window.open('standalone-tour.html', '_blank');
+        const pid = new URLSearchParams(window.location.search).get('project') || 'virtual-tour-360';
+        window.open('standalone-tour.html?project=' + pid, '_blank');
+
       });
       
       container.appendChild(customFsBtn);

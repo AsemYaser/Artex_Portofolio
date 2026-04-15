@@ -82,8 +82,10 @@
     </div>
 
     <script>
-        // Extract project scenes config from script.js perfectly
-        const projectScenes = {
+        // Extract project scenes config
+        const allProjects = {
+          'virtual-tour-360': {
+
             'view1': {
                 image: 'Artex_360/opt_11.jpg',
                 label: 'View 1 — Living Area',
@@ -113,10 +115,113 @@
                     { pitch: 1.63, yaw: -34.31, targetScene: 'view2', label: 'Go to View 2' }
                 ]
             }
+          },
+          'abdo-hamam-360': {
+            'reception': {
+              image: 'Abdo_Hamam_360/reception & dining.jpg',
+              label: 'Reception & Dining',
+              defaultPitch: 0,
+              defaultYaw: 0,
+              hotspots: [
+                { pitch: 0, yaw: 20, targetScene: 'living', label: 'Go to Living Area' },
+                { pitch: 0, yaw: 40, targetScene: 'kitchen', label: 'Go to Kitchen' },
+                { pitch: 0, yaw: 60, targetScene: 'masterbed', label: 'Go to Master Bedroom' },
+                { pitch: 0, yaw: 80, targetScene: 'kids1', label: 'Go to Kids Room 1' },
+                { pitch: 0, yaw: 100, targetScene: 'mainbath', label: 'Go to Main Bathroom' },
+                { pitch: 0, yaw: 120, targetScene: 'laundry', label: 'Go to Laundry' }
+              ]
+            },
+            'living': {
+              image: 'Abdo_Hamam_360/living.jpg',
+              label: 'Living Area',
+              defaultPitch: 0,
+              defaultYaw: 0,
+              hotspots: [{ pitch: 0, yaw: -20, targetScene: 'reception', label: 'Back to Reception & Dining' }]
+            },
+            'kitchen': {
+              image: 'Abdo_Hamam_360/kitchen.jpg',
+              label: 'Kitchen',
+              defaultPitch: 0,
+              defaultYaw: 0,
+              hotspots: [
+                { pitch: 0, yaw: 0, targetScene: 'kitchen2', label: 'Go to Kitchen 2' },
+                { pitch: 0, yaw: -40, targetScene: 'reception', label: 'Back to Reception & Dining' }
+              ]
+            },
+            'kitchen2': {
+              image: 'Abdo_Hamam_360/kitchen 2.jpg',
+              label: 'Kitchen 2',
+              defaultPitch: 0,
+              defaultYaw: 0,
+              hotspots: [{ pitch: 0, yaw: 180, targetScene: 'kitchen', label: 'Back to Kitchen 1' }]
+            },
+            'masterbed': {
+              image: 'Abdo_Hamam_360/master bedroom.jpg',
+              label: 'Master Bedroom',
+              defaultPitch: 0,
+              defaultYaw: 0,
+              hotspots: [
+                { pitch: 0, yaw: 20, targetScene: 'masterdressing', label: 'Go to Master Dressing' },
+                { pitch: 0, yaw: -60, targetScene: 'reception', label: 'Back to Reception & Dining' }
+              ]
+            },
+            'masterdressing': {
+              image: 'Abdo_Hamam_360/master bedroom dressing.jpg',
+              label: 'Master Dressing',
+              defaultPitch: 0,
+              defaultYaw: 0,
+              hotspots: [
+                { pitch: 0, yaw: 20, targetScene: 'masterbath', label: 'Go to Master Bathroom' },
+                { pitch: 0, yaw: 180, targetScene: 'masterbed', label: 'Back to Master Bedroom' }
+              ]
+            },
+            'masterbath': {
+              image: 'Abdo_Hamam_360/master bathroom.jpg',
+              label: 'Master Bathroom',
+              defaultPitch: 0,
+              defaultYaw: 0,
+              hotspots: [{ pitch: 0, yaw: 180, targetScene: 'masterdressing', label: 'Back to Master Dressing' }]
+            },
+            'kids1': {
+              image: 'Abdo_Hamam_360/kids 1.jpg',
+              label: 'Kids Room 1',
+              defaultPitch: 0,
+              defaultYaw: 0,
+              hotspots: [
+                { pitch: 0, yaw: 20, targetScene: 'kids2', label: 'Go to Kids Room 2' },
+                { pitch: 0, yaw: -80, targetScene: 'reception', label: 'Back to Reception & Dining' }
+              ]
+            },
+            'kids2': {
+              image: 'Abdo_Hamam_360/kids 2.jpeg',
+              label: 'Kids Room 2',
+              defaultPitch: 0,
+              defaultYaw: 0,
+              hotspots: [{ pitch: 0, yaw: 180, targetScene: 'kids1', label: 'Back to Kids Room 1' }]
+            },
+            'mainbath': {
+              image: 'Abdo_Hamam_360/main bathroom.jpg',
+              label: 'Main Bathroom',
+              defaultPitch: 0,
+              defaultYaw: 0,
+              hotspots: [{ pitch: 0, yaw: -100, targetScene: 'reception', label: 'Back to Reception & Dining' }]
+            },
+            'laundry': {
+              image: 'Abdo_Hamam_360/laundry.jpeg',
+              label: 'Laundry',
+              defaultPitch: 0,
+              defaultYaw: 0,
+              hotspots: [{ pitch: 0, yaw: -120, targetScene: 'reception', label: 'Back to Reception & Dining' }]
+            }
+          }
         };
 
+        const projectId = new URLSearchParams(window.location.search).get('project') || 'virtual-tour-360';
+        const projectScenes = allProjects[projectId] || allProjects['virtual-tour-360'];
+
         const sceneIds = Object.keys(projectScenes);
-        const firstScene = 'view2';
+        const firstScene = sceneIds[0];
+
         let currentSceneId = firstScene;
         const pannellumScenes = {};
         const fadeEl = document.getElementById('tour360Fade');
