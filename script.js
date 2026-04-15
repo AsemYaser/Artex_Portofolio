@@ -758,8 +758,8 @@ function loadProjectDetails() {
             tourObserver.unobserve(entry.target);
           }
         });
-      }, { 
-        threshold: 0.05, 
+      }, {
+        threshold: 0.05,
         rootMargin: '150px' // Start loading just before it comes into view for a seamless experience
       });
 
@@ -929,7 +929,7 @@ function init360Tour(project) {
       const customFsBtn = document.createElement('div');
       customFsBtn.className = 'pnlm-fullscreen-toggle-button pnlm-sprite pnlm-controls pnlm-control';
       customFsBtn.setAttribute('title', 'Open Fullscreen Tour');
-      
+
       customFsBtn.addEventListener('click', (e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -937,7 +937,7 @@ function init360Tour(project) {
         window.open('standalone-tour.html?project=' + pid, '_blank');
 
       });
-      
+
       container.appendChild(customFsBtn);
     }
   });
@@ -1000,427 +1000,427 @@ function init360Tour(project) {
 
      >>> DELETE THIS ENTIRE BLOCK once your hotspots are placed <<<
      ============================================================ */
-/*
-  (function initCoordHelper() {
-    // --- Crosshair in the center of the viewer ---
-    const crosshair = document.createElement('div');
-    crosshair.className = 'coord-crosshair';
-    crosshair.textContent = '+';
-    viewerEl.appendChild(crosshair);
-
-    // --- Floating readout box (top-left corner) ---
-    const readout = document.createElement('div');
-    readout.className = 'coord-readout';
-    readout.innerHTML = `
-      <div class="coord-title">◈ Hotspot Coordinate Helper</div>
-      <div class="coord-row">
-        <span class="coord-label">Pitch</span>
-        <span class="coord-value" id="coordPitch">0.00</span>
-      </div>
-      <div class="coord-row">
-        <span class="coord-label">Yaw</span>
-        <span class="coord-value" id="coordYaw">0.00</span>
-      </div>
-      <div class="coord-hint">Aim center at a door → copy values to script.js</div>
-    `;
-    viewerEl.appendChild(readout);
-
-    const pitchEl = document.getElementById('coordPitch');
-    const yawEl = document.getElementById('coordYaw');
-
-    // --- Live update loop (runs every frame) ---
-    function updateCoords() {
-      try {
-        const p = viewer.getPitch();
-        const y = viewer.getYaw();
-        if (pitchEl) pitchEl.textContent = p.toFixed(2);
-        if (yawEl) yawEl.textContent = y.toFixed(2);
-      } catch (e) { // viewer not ready yet }
+  /*
+    (function initCoordHelper() {
+      // --- Crosshair in the center of the viewer ---
+      const crosshair = document.createElement('div');
+      crosshair.className = 'coord-crosshair';
+      crosshair.textContent = '+';
+      viewerEl.appendChild(crosshair);
+  
+      // --- Floating readout box (top-left corner) ---
+      const readout = document.createElement('div');
+      readout.className = 'coord-readout';
+      readout.innerHTML = `
+        <div class="coord-title">◈ Hotspot Coordinate Helper</div>
+        <div class="coord-row">
+          <span class="coord-label">Pitch</span>
+          <span class="coord-value" id="coordPitch">0.00</span>
+        </div>
+        <div class="coord-row">
+          <span class="coord-label">Yaw</span>
+          <span class="coord-value" id="coordYaw">0.00</span>
+        </div>
+        <div class="coord-hint">Aim center at a door → copy values to script.js</div>
+      `;
+      viewerEl.appendChild(readout);
+  
+      const pitchEl = document.getElementById('coordPitch');
+      const yawEl = document.getElementById('coordYaw');
+  
+      // --- Live update loop (runs every frame) ---
+      function updateCoords() {
+        try {
+          const p = viewer.getPitch();
+          const y = viewer.getYaw();
+          if (pitchEl) pitchEl.textContent = p.toFixed(2);
+          if (yawEl) yawEl.textContent = y.toFixed(2);
+        } catch (e) { // viewer not ready yet }
+        requestAnimationFrame(updateCoords);
+      }
       requestAnimationFrame(updateCoords);
+    })();
+  */
+  //}
+
+
+  // ========== Before/After Slider ==========
+  function initBeforeAfter(container) {
+    const handle = container.querySelector('.slider-handle');
+    const afterImg = container.querySelector('.after-img');
+    let isDragging = false;
+
+    function updatePosition(x) {
+      const rect = container.getBoundingClientRect();
+      let pos = (x - rect.left) / rect.width;
+      pos = Math.max(0.05, Math.min(0.95, pos));
+      afterImg.style.width = `${pos * 100}%`;
+      handle.style.left = `${pos * 100}%`;
     }
-    requestAnimationFrame(updateCoords);
-  })();
-*/
-}
 
+    container.addEventListener('mousedown', (e) => {
+      isDragging = true;
+      updatePosition(e.clientX);
+    });
 
-// ========== Before/After Slider ==========
-function initBeforeAfter(container) {
-  const handle = container.querySelector('.slider-handle');
-  const afterImg = container.querySelector('.after-img');
-  let isDragging = false;
+    document.addEventListener('mousemove', (e) => {
+      if (isDragging) updatePosition(e.clientX);
+    });
 
-  function updatePosition(x) {
-    const rect = container.getBoundingClientRect();
-    let pos = (x - rect.left) / rect.width;
-    pos = Math.max(0.05, Math.min(0.95, pos));
-    afterImg.style.width = `${pos * 100}%`;
-    handle.style.left = `${pos * 100}%`;
-  }
+    document.addEventListener('mouseup', () => {
+      isDragging = false;
+    });
 
-  container.addEventListener('mousedown', (e) => {
-    isDragging = true;
-    updatePosition(e.clientX);
-  });
-
-  document.addEventListener('mousemove', (e) => {
-    if (isDragging) updatePosition(e.clientX);
-  });
-
-  document.addEventListener('mouseup', () => {
-    isDragging = false;
-  });
-
-  // Touch support
-  container.addEventListener('touchstart', (e) => {
-    isDragging = true;
-    updatePosition(e.touches[0].clientX);
-  });
-
-  container.addEventListener('touchmove', (e) => {
-    if (isDragging) {
-      e.preventDefault();
+    // Touch support
+    container.addEventListener('touchstart', (e) => {
+      isDragging = true;
       updatePosition(e.touches[0].clientX);
-    }
-  });
-
-  container.addEventListener('touchend', () => {
-    isDragging = false;
-  });
-}
-
-// ========== EmailJS Contact Form ==========
-(function () {
-  if (typeof emailjs !== 'undefined') {
-    emailjs.init("Y34sRSIRx2hHdGBgv");
-  }
-})();
-
-
-
-// ========== Smooth scroll for anchor links ==========
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-  anchor.addEventListener('click', function (e) {
-    const target = document.querySelector(this.getAttribute('href'));
-    if (target) {
-      e.preventDefault();
-      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  });
-});
-
-// ---------- Contact Form Validation ----------
-function initContactForm() {
-  var form = document.getElementById('contact-form');
-  var sendBtn = document.getElementById('send-btn');
-  if (!form || !sendBtn) return;
-
-  // Initialize EmailJS
-  if (typeof emailjs !== 'undefined') {
-    emailjs.init('Y34sRSIRx2hHdGBgv');
-  }
-
-  // Block any native form submission entirely
-  form.addEventListener('submit', function (e) {
-    e.preventDefault();
-    e.stopPropagation();
-    return false;
-  });
-
-  // Initialize intl-tel-input for the phone field
-  var phoneField = document.getElementById('phone');
-  var iti = null;
-  if (phoneField && typeof window.intlTelInput !== 'undefined') {
-    iti = window.intlTelInput(phoneField, {
-      initialCountry: "eg",
-      preferredCountries: ["eg", "sa", "ae", "kw", "qa"],
-      utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/18.2.1/js/utils.js"
     });
-  }
 
-  var validators = {
-    name: {
-      test: function (v) { return /^[A-Za-z\s\u0600-\u06FF]{2,}$/.test(v.trim()); },
-      msg: 'Please enter a valid name (letters only, at least 2 characters)'
-    },
-    phone: {
-      test: function (v) {
-        if (iti) return iti.isValidNumber();
-        return /^[\+]?[0-9\s]{7,15}$/.test(v.trim());
-      },
-      msg: 'Please enter a valid phone number for your country'
-    },
-    email: {
-      test: function (v) { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim()); },
-      msg: 'Please enter a valid email address'
-    },
-    message: {
-      test: function (v) { return v.trim().length >= 10; },
-      msg: 'Please enter at least 10 characters'
-    }
-  };
-
-  var fieldIds = ['name', 'phone', 'email', 'message'];
-
-  function showError(fieldId, msg) {
-    var field = document.getElementById(fieldId);
-    var errorEl = document.getElementById(fieldId + '-error');
-    if (field) field.classList.add('field-invalid');
-    if (errorEl) errorEl.textContent = msg;
-  }
-
-  function clearError(fieldId) {
-    var field = document.getElementById(fieldId);
-    var errorEl = document.getElementById(fieldId + '-error');
-    if (field) field.classList.remove('field-invalid');
-    if (errorEl) errorEl.textContent = '';
-  }
-
-  // Clear errors on input
-  fieldIds.forEach(function (id) {
-    var el = document.getElementById(id);
-    if (el) {
-      el.addEventListener('input', function () { clearError(id); });
-    }
-  });
-
-  // Restrict phone to digits, spaces, and +
-  var phoneField = document.getElementById('phone');
-  if (phoneField) {
-    phoneField.addEventListener('input', function (e) {
-      e.target.value = e.target.value.replace(/[^0-9+\s]/g, '');
-    });
-  }
-
-  // SEND button click — validate FIRST, send ONLY if valid
-  sendBtn.addEventListener('click', function () {
-    var isValid = true;
-    var firstInvalid = null;
-
-    for (var i = 0; i < fieldIds.length; i++) {
-      var id = fieldIds[i];
-      var rule = validators[id];
-      var field = document.getElementById(id);
-      if (!field) continue;
-
-      if (!rule.test(field.value)) {
-        showError(id, rule.msg);
-        if (!firstInvalid) firstInvalid = field;
-        isValid = false;
-      } else {
-        clearError(id);
+    container.addEventListener('touchmove', (e) => {
+      if (isDragging) {
+        e.preventDefault();
+        updatePosition(e.touches[0].clientX);
       }
-    }
+    });
 
-    // STOP if any field is invalid
-    if (!isValid) {
-      if (firstInvalid) firstInvalid.focus();
-      return;
-    }
+    container.addEventListener('touchend', () => {
+      isDragging = false;
+    });
+  }
 
-    // ALL fields valid — now send
+  // ========== EmailJS Contact Form ==========
+  (function () {
     if (typeof emailjs !== 'undefined') {
-      sendBtn.textContent = 'Sending...';
-      sendBtn.disabled = true;
-
-      // Extract the full international number before sending
-      if (iti) {
-        phoneField.value = iti.getNumber();
-      }
-
-      emailjs.sendForm('service_gwypcmm', 'template_zwzs3x3', form)
-        .then(function () {
-          sendBtn.textContent = '✓ Message Sent!';
-          sendBtn.style.background = '#25D366';
-          sendBtn.style.borderColor = '#25D366';
-          sendBtn.style.color = '#fff';
-
-          setTimeout(function () {
-            sendBtn.textContent = 'Send Message';
-            sendBtn.style.background = '';
-            sendBtn.style.borderColor = '';
-            sendBtn.style.color = '';
-            sendBtn.disabled = false;
-            form.reset();
-          }, 3000);
-        })
-        .catch(function () {
-          sendBtn.textContent = 'Error! Try Again';
-          sendBtn.style.background = '#ff4d4d';
-          sendBtn.style.borderColor = '#ff4d4d';
-          sendBtn.style.color = '#fff';
-
-          setTimeout(function () {
-            sendBtn.textContent = 'Send Message';
-            sendBtn.style.background = '';
-            sendBtn.style.borderColor = '';
-            sendBtn.style.color = '';
-            sendBtn.disabled = false;
-          }, 3000);
-        });
-    } else {
-      alert('Form service is not configured. Please contact us directly.');
+      emailjs.init("Y34sRSIRx2hHdGBgv");
     }
+  })();
+
+
+
+  // ========== Smooth scroll for anchor links ==========
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
   });
-}
 
-// Run when ready
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initContactForm);
-} else {
-  initContactForm();
-}
+  // ---------- Contact Form Validation ----------
+  function initContactForm() {
+    var form = document.getElementById('contact-form');
+    var sendBtn = document.getElementById('send-btn');
+    if (!form || !sendBtn) return;
 
-// ========== Fullscreen Lightbox ==========
-(function () {
-  // Wait for DOM and project to load
-  const initLightbox = () => {
-    const overlay = document.getElementById('lightboxOverlay');
-    const wrapper = document.getElementById('lightboxWrapper');
-    const closeBtn = document.getElementById('lightboxClose');
-    const prevBtn = document.getElementById('lightboxPrev');
-    const nextBtn = document.getElementById('lightboxNext');
-    const counter = document.getElementById('lightboxCounter');
-
-    if (!overlay || !wrapper) return;
-
-    let currentImages = [];
-    let currentIndex = 0;
-
-    // Use exactly 2 nodes for crossfading to save massive GPU memory
-    let slideA = document.createElement('img');
-    let slideB = document.createElement('img');
-    wrapper.appendChild(slideA);
-    wrapper.appendChild(slideB);
-
-    let activeSlide = slideA;
-    let inactiveSlide = slideB;
-
-    // Create and add loading spinner
-    const spinner = document.createElement('div');
-    spinner.className = 'lightbox-spinner';
-    wrapper.appendChild(spinner);
-
-    const showSpinner = () => spinner.classList.add('active');
-    const hideSpinner = () => spinner.classList.remove('active');
-
-    function preloadImage(url) {
-      if (!url) return;
-      // Only preload if connection is not slow
-      if (navigator.connection && (navigator.connection.saveData || navigator.connection.effectiveType.includes('2g'))) return;
-      const img = new Image();
-      img.src = url;
-      img.decoding = 'async';
+    // Initialize EmailJS
+    if (typeof emailjs !== 'undefined') {
+      emailjs.init('Y34sRSIRx2hHdGBgv');
     }
 
-    function openLightbox(images, index) {
-      currentImages = images;
-      currentIndex = index;
-
-      showSpinner();
-      activeSlide.onload = hideSpinner;
-      activeSlide.src = images[currentIndex];
-      activeSlide.decoding = 'async';
-      activeSlide.classList.add('active');
-      inactiveSlide.classList.remove('active');
-
-      counter.textContent = `${currentIndex + 1} / ${currentImages.length}`;
-      overlay.classList.add('active');
-      document.body.style.overflow = 'hidden';
-
-      if (images.length > 1) {
-        preloadImage(images[(currentIndex + 1) % images.length]);
-        preloadImage(images[(currentIndex - 1 + images.length) % images.length]);
-      }
-    }
-
-    function closeLightbox() {
-      overlay.classList.remove('active');
-      document.body.style.overflow = '';
-      setTimeout(() => {
-        activeSlide.src = '';
-        inactiveSlide.src = '';
-        activeSlide.classList.remove('active');
-      }, 400);
-    }
-
-    function navigate(direction) {
-      if (currentImages.length === 0) return;
-
-      currentIndex = (currentIndex + direction + currentImages.length) % currentImages.length;
-
-      // Setup the hidden slide with new image before fading in
-      showSpinner();
-      inactiveSlide.onload = hideSpinner;
-      inactiveSlide.src = currentImages[currentIndex];
-      inactiveSlide.decoding = 'async';
-
-      // Triggers immediate CSS crossfade 
-      inactiveSlide.classList.add('active');
-      activeSlide.classList.remove('active');
-
-      // Swap references
-      const temp = activeSlide;
-      activeSlide = inactiveSlide;
-      inactiveSlide = temp;
-
-      counter.textContent = `${currentIndex + 1} / ${currentImages.length}`;
-      preloadImage(currentImages[(currentIndex + direction + currentImages.length) % currentImages.length]);
-    }
-
-    // Close handlers
-    closeBtn.addEventListener('click', closeLightbox);
-    overlay.addEventListener('click', (e) => {
-      if (e.target === overlay || e.target.classList.contains('lightbox-image-wrapper')) {
-        closeLightbox();
-      }
+    // Block any native form submission entirely
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      return false;
     });
 
-    // Navigation handlers
-    prevBtn.addEventListener('click', (e) => { e.stopPropagation(); navigate(-1); });
-    nextBtn.addEventListener('click', (e) => { e.stopPropagation(); navigate(1); });
-
-    // Keyboard support
-    document.addEventListener('keydown', (e) => {
-      if (!overlay.classList.contains('active')) return;
-      if (e.key === 'Escape') closeLightbox();
-      if (e.key === 'ArrowLeft') navigate(-1);
-      if (e.key === 'ArrowRight') navigate(1);
-    });
-
-    // Attach click handlers to stacked gallery slides
-    const attachGalleryClicks = () => {
-      const gallery = document.getElementById('stackedGallery');
-      if (!gallery) return;
-
-      // Get the project images from the data
-      const params = new URLSearchParams(window.location.search);
-      const projectId = params.get('project') || 'modern-apartment';
-      const project = projects[projectId] || projects['modern-apartment'];
-      if (!project) return;
-
-      const projectImages = project.images;
-
-      gallery.addEventListener('click', (e) => {
-        const slide = e.target.closest('.stacked-slide');
-        if (!slide || !slide.classList.contains('stack-0')) return;
-
-        // Find which project image index corresponds to this slide
-        const slideIndex = window.currentStackedSlide || 0;
-        const imgIndex = slideIndex % projectImages.length;
-        openLightbox(projectImages, imgIndex);
+    // Initialize intl-tel-input for the phone field
+    var phoneField = document.getElementById('phone');
+    var iti = null;
+    if (phoneField && typeof window.intlTelInput !== 'undefined') {
+      iti = window.intlTelInput(phoneField, {
+        initialCountry: "eg",
+        preferredCountries: ["eg", "sa", "ae", "kw", "qa"],
+        utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/18.2.1/js/utils.js"
       });
+    }
+
+    var validators = {
+      name: {
+        test: function (v) { return /^[A-Za-z\s\u0600-\u06FF]{2,}$/.test(v.trim()); },
+        msg: 'Please enter a valid name (letters only, at least 2 characters)'
+      },
+      phone: {
+        test: function (v) {
+          if (iti) return iti.isValidNumber();
+          return /^[\+]?[0-9\s]{7,15}$/.test(v.trim());
+        },
+        msg: 'Please enter a valid phone number for your country'
+      },
+      email: {
+        test: function (v) { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim()); },
+        msg: 'Please enter a valid email address'
+      },
+      message: {
+        test: function (v) { return v.trim().length >= 10; },
+        msg: 'Please enter at least 10 characters'
+      }
     };
 
-    // Delay to ensure project details are loaded first
-    if (window.location.pathname.includes('project-details')) {
-      setTimeout(attachGalleryClicks, 300);
-    }
-  };
+    var fieldIds = ['name', 'phone', 'email', 'message'];
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initLightbox);
-  } else {
-    initLightbox();
+    function showError(fieldId, msg) {
+      var field = document.getElementById(fieldId);
+      var errorEl = document.getElementById(fieldId + '-error');
+      if (field) field.classList.add('field-invalid');
+      if (errorEl) errorEl.textContent = msg;
+    }
+
+    function clearError(fieldId) {
+      var field = document.getElementById(fieldId);
+      var errorEl = document.getElementById(fieldId + '-error');
+      if (field) field.classList.remove('field-invalid');
+      if (errorEl) errorEl.textContent = '';
+    }
+
+    // Clear errors on input
+    fieldIds.forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el) {
+        el.addEventListener('input', function () { clearError(id); });
+      }
+    });
+
+    // Restrict phone to digits, spaces, and +
+    var phoneField = document.getElementById('phone');
+    if (phoneField) {
+      phoneField.addEventListener('input', function (e) {
+        e.target.value = e.target.value.replace(/[^0-9+\s]/g, '');
+      });
+    }
+
+    // SEND button click — validate FIRST, send ONLY if valid
+    sendBtn.addEventListener('click', function () {
+      var isValid = true;
+      var firstInvalid = null;
+
+      for (var i = 0; i < fieldIds.length; i++) {
+        var id = fieldIds[i];
+        var rule = validators[id];
+        var field = document.getElementById(id);
+        if (!field) continue;
+
+        if (!rule.test(field.value)) {
+          showError(id, rule.msg);
+          if (!firstInvalid) firstInvalid = field;
+          isValid = false;
+        } else {
+          clearError(id);
+        }
+      }
+
+      // STOP if any field is invalid
+      if (!isValid) {
+        if (firstInvalid) firstInvalid.focus();
+        return;
+      }
+
+      // ALL fields valid — now send
+      if (typeof emailjs !== 'undefined') {
+        sendBtn.textContent = 'Sending...';
+        sendBtn.disabled = true;
+
+        // Extract the full international number before sending
+        if (iti) {
+          phoneField.value = iti.getNumber();
+        }
+
+        emailjs.sendForm('service_gwypcmm', 'template_zwzs3x3', form)
+          .then(function () {
+            sendBtn.textContent = '✓ Message Sent!';
+            sendBtn.style.background = '#25D366';
+            sendBtn.style.borderColor = '#25D366';
+            sendBtn.style.color = '#fff';
+
+            setTimeout(function () {
+              sendBtn.textContent = 'Send Message';
+              sendBtn.style.background = '';
+              sendBtn.style.borderColor = '';
+              sendBtn.style.color = '';
+              sendBtn.disabled = false;
+              form.reset();
+            }, 3000);
+          })
+          .catch(function () {
+            sendBtn.textContent = 'Error! Try Again';
+            sendBtn.style.background = '#ff4d4d';
+            sendBtn.style.borderColor = '#ff4d4d';
+            sendBtn.style.color = '#fff';
+
+            setTimeout(function () {
+              sendBtn.textContent = 'Send Message';
+              sendBtn.style.background = '';
+              sendBtn.style.borderColor = '';
+              sendBtn.style.color = '';
+              sendBtn.disabled = false;
+            }, 3000);
+          });
+      } else {
+        alert('Form service is not configured. Please contact us directly.');
+      }
+    });
   }
-})();
+
+  // Run when ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initContactForm);
+  } else {
+    initContactForm();
+  }
+
+  // ========== Fullscreen Lightbox ==========
+  (function () {
+    // Wait for DOM and project to load
+    const initLightbox = () => {
+      const overlay = document.getElementById('lightboxOverlay');
+      const wrapper = document.getElementById('lightboxWrapper');
+      const closeBtn = document.getElementById('lightboxClose');
+      const prevBtn = document.getElementById('lightboxPrev');
+      const nextBtn = document.getElementById('lightboxNext');
+      const counter = document.getElementById('lightboxCounter');
+
+      if (!overlay || !wrapper) return;
+
+      let currentImages = [];
+      let currentIndex = 0;
+
+      // Use exactly 2 nodes for crossfading to save massive GPU memory
+      let slideA = document.createElement('img');
+      let slideB = document.createElement('img');
+      wrapper.appendChild(slideA);
+      wrapper.appendChild(slideB);
+
+      let activeSlide = slideA;
+      let inactiveSlide = slideB;
+
+      // Create and add loading spinner
+      const spinner = document.createElement('div');
+      spinner.className = 'lightbox-spinner';
+      wrapper.appendChild(spinner);
+
+      const showSpinner = () => spinner.classList.add('active');
+      const hideSpinner = () => spinner.classList.remove('active');
+
+      function preloadImage(url) {
+        if (!url) return;
+        // Only preload if connection is not slow
+        if (navigator.connection && (navigator.connection.saveData || navigator.connection.effectiveType.includes('2g'))) return;
+        const img = new Image();
+        img.src = url;
+        img.decoding = 'async';
+      }
+
+      function openLightbox(images, index) {
+        currentImages = images;
+        currentIndex = index;
+
+        showSpinner();
+        activeSlide.onload = hideSpinner;
+        activeSlide.src = images[currentIndex];
+        activeSlide.decoding = 'async';
+        activeSlide.classList.add('active');
+        inactiveSlide.classList.remove('active');
+
+        counter.textContent = `${currentIndex + 1} / ${currentImages.length}`;
+        overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+
+        if (images.length > 1) {
+          preloadImage(images[(currentIndex + 1) % images.length]);
+          preloadImage(images[(currentIndex - 1 + images.length) % images.length]);
+        }
+      }
+
+      function closeLightbox() {
+        overlay.classList.remove('active');
+        document.body.style.overflow = '';
+        setTimeout(() => {
+          activeSlide.src = '';
+          inactiveSlide.src = '';
+          activeSlide.classList.remove('active');
+        }, 400);
+      }
+
+      function navigate(direction) {
+        if (currentImages.length === 0) return;
+
+        currentIndex = (currentIndex + direction + currentImages.length) % currentImages.length;
+
+        // Setup the hidden slide with new image before fading in
+        showSpinner();
+        inactiveSlide.onload = hideSpinner;
+        inactiveSlide.src = currentImages[currentIndex];
+        inactiveSlide.decoding = 'async';
+
+        // Triggers immediate CSS crossfade 
+        inactiveSlide.classList.add('active');
+        activeSlide.classList.remove('active');
+
+        // Swap references
+        const temp = activeSlide;
+        activeSlide = inactiveSlide;
+        inactiveSlide = temp;
+
+        counter.textContent = `${currentIndex + 1} / ${currentImages.length}`;
+        preloadImage(currentImages[(currentIndex + direction + currentImages.length) % currentImages.length]);
+      }
+
+      // Close handlers
+      closeBtn.addEventListener('click', closeLightbox);
+      overlay.addEventListener('click', (e) => {
+        if (e.target === overlay || e.target.classList.contains('lightbox-image-wrapper')) {
+          closeLightbox();
+        }
+      });
+
+      // Navigation handlers
+      prevBtn.addEventListener('click', (e) => { e.stopPropagation(); navigate(-1); });
+      nextBtn.addEventListener('click', (e) => { e.stopPropagation(); navigate(1); });
+
+      // Keyboard support
+      document.addEventListener('keydown', (e) => {
+        if (!overlay.classList.contains('active')) return;
+        if (e.key === 'Escape') closeLightbox();
+        if (e.key === 'ArrowLeft') navigate(-1);
+        if (e.key === 'ArrowRight') navigate(1);
+      });
+
+      // Attach click handlers to stacked gallery slides
+      const attachGalleryClicks = () => {
+        const gallery = document.getElementById('stackedGallery');
+        if (!gallery) return;
+
+        // Get the project images from the data
+        const params = new URLSearchParams(window.location.search);
+        const projectId = params.get('project') || 'modern-apartment';
+        const project = projects[projectId] || projects['modern-apartment'];
+        if (!project) return;
+
+        const projectImages = project.images;
+
+        gallery.addEventListener('click', (e) => {
+          const slide = e.target.closest('.stacked-slide');
+          if (!slide || !slide.classList.contains('stack-0')) return;
+
+          // Find which project image index corresponds to this slide
+          const slideIndex = window.currentStackedSlide || 0;
+          const imgIndex = slideIndex % projectImages.length;
+          openLightbox(projectImages, imgIndex);
+        });
+      };
+
+      // Delay to ensure project details are loaded first
+      if (window.location.pathname.includes('project-details')) {
+        setTimeout(attachGalleryClicks, 300);
+      }
+    };
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initLightbox);
+    } else {
+      initLightbox();
+    }
+  })();
