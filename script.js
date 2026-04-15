@@ -186,15 +186,15 @@ const projects = {
      ABDO HAMAM 360° VIRTUAL TOUR
      ============================================================ */
   'abdo-hamam-360': {
-    title: 'Abdo Hamam | 360° Virtual Tour',
+    title: 'Modern villa | 360° Virtual Tour',
     category: 'Virtual Tour',
     style: 'Interactive Experience',
     year: '2026',
-    client: 'Abdo Hamam',
+    client: 'Modern villa',
     heroImg: 'Abdo_Hamam_360/reception & dining.jpg',
     images: ['Abdo_Hamam_360/reception & dining.jpg'],
     is360: true,
-    desc1: 'Step inside the Abdo Hamam project through a fully immersive 360° virtual tour. Experience the carefully curated spaces, from the elegant reception and dining area to the intricate details of the master bedroom and bathrooms. Navigate dynamically using interactive hotspots and explore every angle.',
+    desc1: 'Step inside the Modern villa project through a fully immersive 360° virtual tour. Experience the carefully curated spaces, from the elegant reception and dining area to the intricate details of the master bedroom and bathrooms. Navigate dynamically using interactive hotspots and explore every angle.',
     desc2: 'This virtual presentation offers an authentic, realistic view of the final render, allowing you to walk through the living spaces, kitchen, and private rooms seamlessly.',
     scenes: {
       'reception': {
@@ -1035,7 +1035,7 @@ function init360Tour(project) {
         const y = viewer.getYaw();
         if (pitchEl) pitchEl.textContent = p.toFixed(2);
         if (yawEl) yawEl.textContent = y.toFixed(2);
-      } catch (e) { }
+      } catch (e) { /* viewer not ready yet */ }
       requestAnimationFrame(updateCoords);
     }
     requestAnimationFrame(updateCoords);
