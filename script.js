@@ -203,12 +203,8 @@ const projects = {
         defaultPitch: 0,
         defaultYaw: 0,
         hotspots: [
-          { pitch: 0, yaw: 20, targetScene: 'living', label: 'Go to Living Area' },
-          { pitch: 0, yaw: 40, targetScene: 'kitchen', label: 'Go to Kitchen' },
-          { pitch: 0, yaw: 60, targetScene: 'masterbed', label: 'Go to Master Bedroom' },
-          { pitch: 0, yaw: 80, targetScene: 'kids1', label: 'Go to Kids Room 1' },
-          { pitch: 0, yaw: 100, targetScene: 'mainbath', label: 'Go to Main Bathroom' },
-          { pitch: 0, yaw: 120, targetScene: 'laundry', label: 'Go to Laundry' }
+          { pitch: 1.22, yaw: 73.73, targetScene: 'kitchen', label: 'Go to Kitchen' },
+          { pitch: 1.46, yaw: 118.72, targetScene: 'living', label: 'Go to Living Area' }
         ]
       },
       'living': {
@@ -216,7 +212,14 @@ const projects = {
         label: 'Living Area',
         defaultPitch: 0,
         defaultYaw: 0,
-        hotspots: [{ pitch: 0, yaw: -20, targetScene: 'reception', label: 'Back to Reception & Dining' }]
+        hotspots: [
+          { pitch: -1.86, yaw: -170, targetScene: 'reception', label: 'Back to Reception & Dining' },
+          { pitch: -9, yaw: -15, targetScene: 'masterbed', label: 'Go to Master Bedroom' },
+          { pitch: -11, yaw: -39, targetScene: 'kids1', label: 'Go to Kids Room 1' },
+          { pitch: -18, yaw: -83, targetScene: 'kids2', label: 'Go to Kids Room 2' },
+          { pitch: -8, yaw: -152, targetScene: 'mainbath', label: 'Go to Main Bathroom' },
+          { pitch: -7, yaw: 29, targetScene: 'laundry', label: 'Go to Laundry' }
+        ]
       },
       'kitchen': {
         image: 'Abdo_Hamam_360/kitchen.jpg',
@@ -224,16 +227,8 @@ const projects = {
         defaultPitch: 0,
         defaultYaw: 0,
         hotspots: [
-          { pitch: 0, yaw: 0, targetScene: 'kitchen2', label: 'Go to Kitchen 2' },
-          { pitch: 0, yaw: -40, targetScene: 'reception', label: 'Back to Reception & Dining' }
+          { pitch: -1.30, yaw: -178.81, targetScene: 'reception', label: 'Back to Reception & Dining' }
         ]
-      },
-      'kitchen2': {
-        image: 'Abdo_Hamam_360/kitchen 2.jpg',
-        label: 'Kitchen 2',
-        defaultPitch: 0,
-        defaultYaw: 0,
-        hotspots: [{ pitch: 0, yaw: 180, targetScene: 'kitchen', label: 'Back to Kitchen 1' }]
       },
       'masterbed': {
         image: 'Abdo_Hamam_360/master bedroom.jpg',
@@ -241,8 +236,9 @@ const projects = {
         defaultPitch: 0,
         defaultYaw: 0,
         hotspots: [
-          { pitch: 0, yaw: 20, targetScene: 'masterdressing', label: 'Go to Master Dressing' },
-          { pitch: 0, yaw: -60, targetScene: 'reception', label: 'Back to Reception & Dining' }
+          { pitch: -6, yaw: 34, targetScene: 'masterbath', label: 'Go to Master Bathroom' },
+          { pitch: -2, yaw: 26, targetScene: 'masterdressing', label: 'Go to Master Dressing' },
+          { pitch: -11, yaw: 123, targetScene: 'living', label: 'Go to Living Area' }
         ]
       },
       'masterdressing': {
@@ -251,8 +247,8 @@ const projects = {
         defaultPitch: 0,
         defaultYaw: 0,
         hotspots: [
-          { pitch: 0, yaw: 20, targetScene: 'masterbath', label: 'Go to Master Bathroom' },
-          { pitch: 0, yaw: 180, targetScene: 'masterbed', label: 'Back to Master Bedroom' }
+          { pitch: -15, yaw: -153, targetScene: 'masterbath', label: 'Go to Master Bathroom' },
+          { pitch: -6, yaw: -115, targetScene: 'masterbed', label: 'Back to Master Bedroom' }
         ]
       },
       'masterbath': {
@@ -260,7 +256,9 @@ const projects = {
         label: 'Master Bathroom',
         defaultPitch: 0,
         defaultYaw: 0,
-        hotspots: [{ pitch: 0, yaw: 180, targetScene: 'masterdressing', label: 'Back to Master Dressing' }]
+        hotspots: [
+          { pitch: -22, yaw: -168, targetScene: 'masterdressing', label: 'Back to Master Dressing' }
+        ]
       },
       'kids1': {
         image: 'Abdo_Hamam_360/kids 1.jpg',
@@ -268,8 +266,7 @@ const projects = {
         defaultPitch: 0,
         defaultYaw: 0,
         hotspots: [
-          { pitch: 0, yaw: 20, targetScene: 'kids2', label: 'Go to Kids Room 2' },
-          { pitch: 0, yaw: -80, targetScene: 'reception', label: 'Back to Reception & Dining' }
+          { pitch: -13, yaw: 160, targetScene: 'living', label: 'Back to Living Area' }
         ]
       },
       'kids2': {
@@ -277,21 +274,27 @@ const projects = {
         label: 'Kids Room 2',
         defaultPitch: 0,
         defaultYaw: 0,
-        hotspots: [{ pitch: 0, yaw: 180, targetScene: 'kids1', label: 'Back to Kids Room 1' }]
+        hotspots: [
+          { pitch: -3, yaw: 128, targetScene: 'living', label: 'Back to Living Area' }
+        ]
       },
       'mainbath': {
         image: 'Abdo_Hamam_360/main bathroom.jpg',
         label: 'Main Bathroom',
         defaultPitch: 0,
         defaultYaw: 0,
-        hotspots: [{ pitch: 0, yaw: -100, targetScene: 'reception', label: 'Back to Reception & Dining' }]
+        hotspots: [
+          { pitch: -14, yaw: -87, targetScene: 'living', label: 'Back to Living Area' }
+        ]
       },
       'laundry': {
         image: 'Abdo_Hamam_360/laundry.jpeg',
         label: 'Laundry',
         defaultPitch: 0,
         defaultYaw: 0,
-        hotspots: [{ pitch: 0, yaw: -120, targetScene: 'reception', label: 'Back to Reception & Dining' }]
+        hotspots: [
+          { pitch: -5, yaw: 1, targetScene: 'living', label: 'Back to Living Area' }
+        ]
       }
     }
   },
@@ -987,7 +990,59 @@ function init360Tour(project) {
   // Expose viewer to console for debugging hotspot positions
   // Usage: In browser console, type: window.tour360Viewer.getYaw() / .getPitch()
   window.tour360Viewer = viewer;
+
+  /* ============================================================
+     TEMPORARY: Coordinate Helper Tool
+     ============================================================
+     Adds a center crosshair and a live pitch/yaw readout to the
+     viewer so you can visually aim at a door/pathway and read
+     the exact coordinates to use in the hotspot config above.
+
+     >>> DELETE THIS ENTIRE BLOCK once your hotspots are placed <<<
+     ============================================================ */
+/*
+  (function initCoordHelper() {
+    // --- Crosshair in the center of the viewer ---
+    const crosshair = document.createElement('div');
+    crosshair.className = 'coord-crosshair';
+    crosshair.textContent = '+';
+    viewerEl.appendChild(crosshair);
+
+    // --- Floating readout box (top-left corner) ---
+    const readout = document.createElement('div');
+    readout.className = 'coord-readout';
+    readout.innerHTML = `
+      <div class="coord-title">◈ Hotspot Coordinate Helper</div>
+      <div class="coord-row">
+        <span class="coord-label">Pitch</span>
+        <span class="coord-value" id="coordPitch">0.00</span>
+      </div>
+      <div class="coord-row">
+        <span class="coord-label">Yaw</span>
+        <span class="coord-value" id="coordYaw">0.00</span>
+      </div>
+      <div class="coord-hint">Aim center at a door → copy values to script.js</div>
+    `;
+    viewerEl.appendChild(readout);
+
+    const pitchEl = document.getElementById('coordPitch');
+    const yawEl = document.getElementById('coordYaw');
+
+    // --- Live update loop (runs every frame) ---
+    function updateCoords() {
+      try {
+        const p = viewer.getPitch();
+        const y = viewer.getYaw();
+        if (pitchEl) pitchEl.textContent = p.toFixed(2);
+        if (yawEl) yawEl.textContent = y.toFixed(2);
+      } catch (e) { }
+      requestAnimationFrame(updateCoords);
+    }
+    requestAnimationFrame(updateCoords);
+  })();
+*/
 }
+
 
 // ========== Before/After Slider ==========
 function initBeforeAfter(container) {

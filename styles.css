@@ -3005,4 +3005,76 @@ body.dark-mode .header.dark .logo .logo-text {
   }
 }
 
+/* ============================================================ 
+   DEVELOPER TOOL: Coordinate Helper Readout
+   ============================================================ 
+.coord-readout {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 1000;
+  border: 1px solid rgba(193, 157, 95, 0.4);
+  border-radius: 10px;
+  padding: 12px 18px;
+  pointer-events: none;
+  font-family: 'Courier New', monospace;
+  min-width: 220px;
+}
 
+.coord-readout .coord-title {
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+  margin-bottom: 8px;
+  font-family: var(--font-body);
+}
+
+.coord-readout .coord-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 3px 0;
+}
+
+.coord-readout .coord-label {
+  font-size: 0.7rem;
+  color: #888;
+  font-weight: 400;
+}
+
+.coord-readout .coord-value {
+  font-size: 0.85rem;
+  color: #fff;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.coord-readout .coord-hint {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  font-size: 0.5rem;
+  color: #666;
+  letter-spacing: 0.06em;
+  font-family: var(--font-body);
+  text-transform: uppercase;
+}
+
+.coord-crosshair {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--color-gold);
+  font-size: 24px;
+  font-weight: 300;
+  z-index: 1000;
+  pointer-events: none;
+  opacity: 0.7;
+}
+*/
