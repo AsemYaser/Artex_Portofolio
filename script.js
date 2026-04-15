@@ -946,20 +946,13 @@ function init360Tour(project) {
   function navigateToScene(targetSceneId) {
     if (targetSceneId === currentSceneId) return;
 
-    // Fade to black
-    if (fadeEl) fadeEl.classList.add('active');
+    // Show loading overlay during image fetch to prevent perceived lag
+    if (loaderEl) loaderEl.classList.remove('hidden');
 
-    setTimeout(() => {
-      // Switch scene while screen is black
-      viewer.loadScene(targetSceneId);
-      currentSceneId = targetSceneId;
-      updateSceneNav(targetSceneId);
-
-      // Fade back in
-      setTimeout(() => {
-        if (fadeEl) fadeEl.classList.remove('active');
-      }, 300);
-    }, 400);
+    // Use Pannellum's native WebGL crossfade transition (sceneFadeDuration)
+    viewer.loadScene(targetSceneId);
+    currentSceneId = targetSceneId;
+    updateSceneNav(targetSceneId);
   }
 
   // ---- Build Scene Navigation Pills ----

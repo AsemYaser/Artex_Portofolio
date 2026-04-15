@@ -231,15 +231,10 @@
 
         function navigateToScene(targetSceneId) {
             if (targetSceneId === currentSceneId) return;
-            if (fadeEl) fadeEl.classList.add('active');
             
-            setTimeout(() => {
-                viewer.loadScene(targetSceneId);
-                currentSceneId = targetSceneId;
-                setTimeout(() => {
-                    if (fadeEl) fadeEl.classList.remove('active');
-                }, 300);
-            }, 400);
+            // Use Pannellum's native WebGL crossfade transition
+            viewer.loadScene(targetSceneId);
+            currentSceneId = targetSceneId;
         }
 
         sceneIds.forEach(sceneId => {
