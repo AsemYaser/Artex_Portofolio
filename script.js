@@ -1035,7 +1035,7 @@ function init360Tour(project) {
         const y = viewer.getYaw();
         if (pitchEl) pitchEl.textContent = p.toFixed(2);
         if (yawEl) yawEl.textContent = y.toFixed(2);
-      } catch (e) { /* viewer not ready yet */ }
+      } catch (e) { // viewer not ready yet }
       requestAnimationFrame(updateCoords);
     }
     requestAnimationFrame(updateCoords);
