@@ -1,0 +1,23 @@
+{
+  "name": "artex-portfolio",
+  "version": "1.0.0",
+  "description": "Artex Designs — Premium Interior Design Studio Portfolio",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AsemYaser/Artex_Portofolio.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AsemYaser/Artex_Portofolio/issues"
+  },
+  "homepage": "https://github.com/AsemYaser/Artex_Portofolio#readme",
+  "dependencies": {
+    "@vercel/speed-insights": "^2.0.0"
+  }
+}
