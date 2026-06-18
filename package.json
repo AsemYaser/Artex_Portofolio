@@ -4,7 +4,8 @@
   "description": "Artex Designs — Premium Interior Design Studio Portfolio",
   "main": "script.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "node generate-config.js"
   },
   "repository": {
     "type": "git",

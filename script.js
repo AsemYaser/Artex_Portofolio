@@ -1144,6 +1144,7 @@ function init360Tour(project) {
 
   const sceneIds = Object.keys(project.scenes);
   const preloadedImages = new Set();
+  let loaderTimeout = null;
   const firstScene = sceneIds[0];  // Default starting scene
   let currentSceneId = firstScene;
 
@@ -1242,6 +1243,10 @@ function init360Tour(project) {
 
   // ---- Hide loading overlay & Fullscreen Fallback for iPhone ----
   viewer.on('load', () => {
+    if (loaderTimeout) {
+      clearTimeout(loaderTimeout);
+      loaderTimeout = null;
+    }
     if (loaderEl) loaderEl.classList.add('hidden');
 
     // MOBILE FIX: If Pannellum hides the fullscreen button (common on iPhone), 
@@ -1299,8 +1304,13 @@ function init360Tour(project) {
     const targetScene = project.scenes[targetSceneId];
     if (!targetScene) return;
 
-    // Show loading overlay during image fetch to prevent perceived lag
-    if (loaderEl) loaderEl.classList.remove('hidden');
+    // Show loading overlay during image fetch to prevent perceived lag (only if it takes >200ms)
+    if (loaderTimeout) clearTimeout(loaderTimeout);
+    if (loaderEl) {
+      loaderTimeout = setTimeout(() => {
+        loaderEl.classList.remove('hidden');
+      }, 200);
+    }
 
     if (targetScene.isFlat) {
       showFlatScene(targetSceneId);
