@@ -168,6 +168,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  // ---------- Firestore Projects (Portfolio Page) ----------
+  if (document.getElementById('projectsGrid') && typeof firebase !== 'undefined' && firebase.apps.length > 0) {
+    loadFirestorePortfolioCards();
+  }
+
   // ---------- Project Details Page ----------
   if (window.location.pathname.includes('project-details')) {
     loadProjectDetails();
@@ -183,6 +188,178 @@ document.addEventListener('DOMContentLoaded', () => {
 // ========== Project Data ==========
 const projects = {
   /* ============================================================
+     WHITE PARK 360° VIRTUAL TOUR
+     ============================================================
+     Main overview scene (Site22) acts as the hub and connects
+     to ALL other areas via hotspots. Each area then hotspots
+     back to the overview for easy navigation.
+     Folder: 360_Projects/White_Park/
+  ============================================================ */
+  'white-park-360': {
+    title: 'White Park | 360° Virtual Tour',
+    category: 'Virtual Tour',
+    style: 'Interactive Experience',
+    year: '2026',
+    client: 'White Park Development',
+    heroImg: '360_Projects/White_Park/Site22.jpg',
+    images: ['360_Projects/White_Park/Site22.jpg'],
+    is360: true,
+    desc1: 'Immerse yourself in White Park — an expansive, masterfully planned outdoor development that redefines community living. Navigate through a fully interactive 360° virtual tour and explore the entire compound from the majestic gateway entrance and lush kids areas to the vibrant restaurant, open-air wedding venue, and serene Nile-view promenade.',
+    desc2: 'From the sweeping Site 22 overview, every corner of White Park is just one click away. Discover the boutique stores, hotel facilities, nursery, and parking zones — all connected through immersive panoramic scenes with intuitive hotspot navigation. Experience the full scale and beauty of this landmark development before you visit.',
+    scenes: {
+      /* =====================================================
+         SITE 22 — Main Hub / Overview
+         All other areas are reachable from here.
+         ===================================================== */
+      'overview': {
+        image: '360_Projects/White_Park/Site22.jpg',
+        label: 'Site 22 — Overview',
+        isFlat: true,
+        hotspots: [
+          { x: 18, y: 64, targetScene: 'parking',        label: 'Go to Parking' },
+          { x: 39, y: 83, targetScene: 'hall',           label: 'Go to Hall Area' },
+          { x: 48, y: 61, targetScene: 'restaurant',     label: 'Go to Restaurant' },
+          { x: 61, y: 50, targetScene: 'pano13',         label: 'Go to Cafe' },
+          { x: 7,  y: 33, targetScene: 'nursery',        label: 'Go to Nursery' },
+          { x: 20, y: 40, targetScene: 'wedding',        label: 'Go to Open Wedding Hall' },
+          { x: 79, y: 75, targetScene: 'kids-area',      label: 'Go to Kids Area' },
+          { x: 80, y: 55, targetScene: 'pano14',         label: 'Go to Food Court' },
+          { x: 50, y: 42, targetScene: 'stores',         label: 'Go to Stores' },
+          { x: 72, y: 22, targetScene: 'nile-view',      label: 'Go to Nile View' },
+          { x: 36, y: 42, targetScene: 'hotel',          label: 'Go to Hotel' },
+          { x: 89, y: 65, targetScene: 'kids-gate',      label: 'Go to Kids Gate' },
+          { x: 72, y: 41, targetScene: 'gateway',       label: 'Go to Gateway' }
+        ]
+      },
+      'gateway': {
+        image: '360_Projects/White_Park/gate way.jpg',
+        label: 'Gateway Entrance',
+        defaultPitch: 0,
+        defaultYaw: 0,
+        hotspots: [
+          { pitch: -4, yaw: -146, targetScene: 'nile-view', label: 'Go to Nile View' },
+          { pitch: 5,  yaw: -31,  targetScene: 'pano14',    label: 'Go to Food Court' }
+        ]
+      },
+      'parking': {
+        image: '360_Projects/White_Park/parking.jpg',
+        label: 'Parking',
+        defaultPitch: 0,
+        defaultYaw: 0,
+        hotspots: [
+          { pitch: -1, yaw: 148, targetScene: 'hall', label: 'Go to Hall Area' }
+        ]
+      },
+      'hall': {
+        image: '360_Projects/White_Park/hall area.jpg',
+        label: 'Hall Area',
+        defaultPitch: 0,
+        defaultYaw: 0,
+        hotspots: [
+          { pitch: -2, yaw: 63, targetScene: 'restaurant', label: 'Go to Restaurant' }
+        ]
+      },
+      'hotel': {
+        image: '360_Projects/White_Park/hotel.jpg',
+        label: 'Hotel',
+        defaultPitch: 0,
+        defaultYaw: 0,
+        hotspots: [
+          { pitch: -1,   yaw: -144, targetScene: 'wedding', label: 'Go to Open Wedding Hall' },
+          { pitch: -0.5, yaw: 37,   targetScene: 'stores',  label: 'Go to Stores' }
+        ]
+      },
+      'restaurant': {
+        image: '360_Projects/White_Park/restaurant.jpg',
+        label: 'Restaurant',
+        defaultPitch: 0,
+        defaultYaw: 0,
+        hotspots: [
+          { pitch: 3,   yaw: 63,    targetScene: 'hall',    label: 'Go to Hall Area' },
+          { pitch: -3,  yaw: -163,  targetScene: 'stores',  label: 'Go to Stores' },
+          { pitch: 3,   yaw: -80,   targetScene: 'pano13',  label: 'Go to Cafe' },
+          { pitch: 0.5, yaw: -54,   targetScene: 'pano14',  label: 'Go to Food Court' }
+        ]
+      },
+      'stores': {
+        image: '360_Projects/White_Park/stores.jpg',
+        label: 'Stores',
+        defaultPitch: 0,
+        defaultYaw: 0,
+        hotspots: [
+          { pitch: -2,  yaw: 42,   targetScene: 'nile-view', label: 'Go to Nile View' },
+          { pitch: 0.5, yaw: -122, targetScene: 'hall',      label: 'Go to Hall Area' }
+        ]
+      },
+      'nile-view': {
+        image: '360_Projects/White_Park/nile view.jpg',
+        label: 'Nile View',
+        defaultPitch: 0,
+        defaultYaw: 0,
+        hotspots: [
+          { pitch: -0.5, yaw: -70, targetScene: 'gateway', label: 'Go to Gateway' },
+          { pitch: -0.8, yaw: 72,  targetScene: 'stores',  label: 'Go to Stores' }
+        ]
+      },
+      'kids-gate': {
+        image: '360_Projects/White_Park/kids gate.jpg',
+        label: 'Kids Gate',
+        defaultPitch: 0,
+        defaultYaw: 0,
+        hotspots: [
+          { pitch: -1, yaw: -1, targetScene: 'kids-area', label: 'Go to Kids Area' }
+        ]
+      },
+      'kids-area': {
+        image: '360_Projects/White_Park/kids area.jpg',
+        label: 'Kids Area',
+        defaultPitch: 0,
+        defaultYaw: 0,
+        hotspots: [
+          { pitch: 2, yaw: -89, targetScene: 'hall', label: 'Go to Hall Area' }
+        ]
+      },
+      'nursery': {
+        image: '360_Projects/White_Park/nersury.jpg',
+        label: 'Nursery',
+        defaultPitch: 0,
+        defaultYaw: 0,
+        hotspots: [
+          { pitch: -1, yaw: -95, targetScene: 'wedding', label: 'Go to Open Wedding Hall' }
+        ]
+      },
+      'wedding': {
+        image: '360_Projects/White_Park/open air wedding.jpg',
+        label: 'Open Air Wedding',
+        defaultPitch: 0,
+        defaultYaw: 0,
+        hotspots: [
+          { pitch: 1, yaw: -63, targetScene: 'hotel',     label: 'Go to Hotel' },
+          { pitch: 1, yaw: 177, targetScene: 'nile-view', label: 'Go to Nile View' }
+        ]
+      },
+      'pano13': {
+        image: '360_Projects/White_Park/Pano_13.jpg',
+        label: 'Cafe',
+        defaultPitch: 0,
+        defaultYaw: 0,
+        hotspots: [
+          { pitch: -2, yaw: 92, targetScene: 'restaurant', label: 'Go to Restaurant' }
+        ]
+      },
+      'pano14': {
+        image: '360_Projects/White_Park/Pano_14.jpg',
+        label: 'Food Court',
+        defaultPitch: 0,
+        defaultYaw: 0,
+        hotspots: [
+          { pitch: -2,   yaw: -146, targetScene: 'kids-area', label: 'Go to Kids Area' },
+          { pitch: -0.5, yaw: -99,  targetScene: 'hall',      label: 'Go to Hall Area' }
+        ]
+      }
+    }
+  },
+  /* ============================================================
      ABDO HAMAM 360° VIRTUAL TOUR
      ============================================================ */
   'abdo-hamam-360': {
@@ -191,14 +368,14 @@ const projects = {
     style: 'Interactive Experience',
     year: '2026',
     client: 'Modern villa',
-    heroImg: 'Abdo_Hamam_360/reception & dining.jpg',
-    images: ['Abdo_Hamam_360/reception & dining.jpg'],
+    heroImg: '360_Projects/Abdo_Hamam_360/reception & dining.jpg',
+    images: ['360_Projects/Abdo_Hamam_360/reception & dining.jpg'],
     is360: true,
     desc1: 'Step inside the Modern villa project through a fully immersive 360° virtual tour. Experience the carefully curated spaces, from the elegant reception and dining area to the intricate details of the master bedroom and bathrooms. Navigate dynamically using interactive hotspots and explore every angle.',
     desc2: 'This virtual presentation offers an authentic, realistic view of the final render, allowing you to walk through the living spaces, kitchen, and private rooms seamlessly.',
     scenes: {
       'reception': {
-        image: 'Abdo_Hamam_360/reception & dining.jpg',
+        image: '360_Projects/Abdo_Hamam_360/reception & dining.jpg',
         label: 'Reception & Dining',
         defaultPitch: 0,
         defaultYaw: 0,
@@ -208,7 +385,7 @@ const projects = {
         ]
       },
       'living': {
-        image: 'Abdo_Hamam_360/living.jpg',
+        image: '360_Projects/Abdo_Hamam_360/living.jpg',
         label: 'Living Area',
         defaultPitch: 0,
         defaultYaw: 0,
@@ -222,7 +399,7 @@ const projects = {
         ]
       },
       'kitchen': {
-        image: 'Abdo_Hamam_360/kitchen.jpg',
+        image: '360_Projects/Abdo_Hamam_360/kitchen.jpg',
         label: 'Kitchen',
         defaultPitch: 0,
         defaultYaw: 0,
@@ -231,7 +408,7 @@ const projects = {
         ]
       },
       'masterbed': {
-        image: 'Abdo_Hamam_360/master bedroom.jpg',
+        image: '360_Projects/Abdo_Hamam_360/master bedroom.jpg',
         label: 'Master Bedroom',
         defaultPitch: 0,
         defaultYaw: 0,
@@ -242,7 +419,7 @@ const projects = {
         ]
       },
       'masterdressing': {
-        image: 'Abdo_Hamam_360/master bedroom dressing.jpg',
+        image: '360_Projects/Abdo_Hamam_360/master bedroom dressing.jpg',
         label: 'Master Dressing',
         defaultPitch: 0,
         defaultYaw: 0,
@@ -252,7 +429,7 @@ const projects = {
         ]
       },
       'masterbath': {
-        image: 'Abdo_Hamam_360/master bathroom.jpg',
+        image: '360_Projects/Abdo_Hamam_360/master bathroom.jpg',
         label: 'Master Bathroom',
         defaultPitch: 0,
         defaultYaw: 0,
@@ -261,7 +438,7 @@ const projects = {
         ]
       },
       'kids1': {
-        image: 'Abdo_Hamam_360/kids 1.jpg',
+        image: '360_Projects/Abdo_Hamam_360/kids 1.jpg',
         label: 'Kids Room 1',
         defaultPitch: 0,
         defaultYaw: 0,
@@ -270,7 +447,7 @@ const projects = {
         ]
       },
       'kids2': {
-        image: 'Abdo_Hamam_360/kids 2.jpeg',
+        image: '360_Projects/Abdo_Hamam_360/kids 2.jpeg',
         label: 'Kids Room 2',
         defaultPitch: 0,
         defaultYaw: 0,
@@ -279,7 +456,7 @@ const projects = {
         ]
       },
       'mainbath': {
-        image: 'Abdo_Hamam_360/main bathroom.jpg',
+        image: '360_Projects/Abdo_Hamam_360/main bathroom.jpg',
         label: 'Main Bathroom',
         defaultPitch: 0,
         defaultYaw: 0,
@@ -288,7 +465,7 @@ const projects = {
         ]
       },
       'laundry': {
-        image: 'Abdo_Hamam_360/laundry.jpeg',
+        image: '360_Projects/Abdo_Hamam_360/laundry.jpeg',
         label: 'Laundry',
         defaultPitch: 0,
         defaultYaw: 0,
@@ -326,25 +503,14 @@ const projects = {
     style: 'Interactive Experience',
     year: '2026',
     client: 'Interior Showcase',
-    heroImg: 'Artex_360/opt_11.jpg',
-    images: ['Artex_360/opt_11.jpg'],
+    heroImg: '360_Projects/Artex_360/opt_11.jpg',
+    images: ['360_Projects/Artex_360/opt_11.jpg'],
     is360: true,  // <-- This flag triggers the 360° viewer
     desc1: 'Step inside our latest interior design concept through a fully immersive 360° virtual tour. Navigate between three distinct spaces using interactive hotspots, experiencing each room as if you were physically present. Drag to look around, zoom to inspect materials and finishes, and click the golden navigation points to seamlessly move between views.',
     desc2: 'This interactive experience showcases how cutting-edge virtual tour technology can elevate the way clients experience design proposals. Every angle, every detail, every texture — explored at your own pace from the comfort of your screen. The future of interior design presentation is here.',
-    /* ============================================================
-       SCENES CONFIGURATION
-       ------------------------------------------------------------ 
-       Each scene = one 360° image + its hotspots.
-       
-       Hotspot properties:
-         - pitch: vertical angle (-90 to +90)
-         - yaw:   horizontal angle (-180 to +180)  
-         - targetScene: which scene ID to navigate to
-         - label: tooltip text shown on hover
-       ============================================================ */
     scenes: {
       'view1': {
-        image: 'Artex_360/opt_11.jpg',
+        image: '360_Projects/Artex_360/opt_11.jpg',
         label: 'View 1 — Living Area',
         defaultPitch: 0,
         defaultYaw: 0,
@@ -354,7 +520,7 @@ const projects = {
         ]
       },
       'view2': {
-        image: 'Artex_360/opt_12.jpg',
+        image: '360_Projects/Artex_360/opt_12.jpg',
         label: 'View 2 — Dining Area',
         defaultPitch: 0,
         defaultYaw: 0,
@@ -364,7 +530,7 @@ const projects = {
         ]
       },
       'view3': {
-        image: 'Artex_360/opt_13.jpg',
+        image: '360_Projects/Artex_360/opt_13.jpg',
         label: 'View 3 — Bedroom',
         defaultPitch: 0,
         defaultYaw: 0,
@@ -704,16 +870,150 @@ const projects = {
   }
 };
 
+// ========== Firestore → Portfolio Grid (prepend cloud projects) ==========
+async function loadFirestorePortfolioCards() {
+  try {
+    const db = firebase.firestore();
+    const snapshot = await db.collection('projects').orderBy('createdAt', 'desc').get();
+    if (snapshot.empty) return;
+
+    const grid = document.getElementById('projectsGrid');
+    if (!grid) return;
+
+    const fragment = document.createDocumentFragment();
+    const newCards = [];
+
+    snapshot.forEach(doc => {
+      const data = doc.data();
+      const projectId = doc.id;
+
+      // Add to hardcoded projects object so project-details can find it
+      projects[projectId] = data;
+
+      // Build card HTML — same structure as existing hardcoded cards
+      const card = document.createElement('a');
+      card.href = 'project-details.html?project=' + projectId;
+      card.className = 'project-card reveal';
+      card.dataset.category = data.category
+        ? data.category.toLowerCase().replace(/\s+/g, '-')
+        : 'residential';
+
+      let badgeHTML = '';
+      if (data.is360) {
+        badgeHTML = '<div class="tour-badge-360">' +
+          '<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>' +
+          '360° Tour</div>';
+      }
+
+      const safeTitle = data.title ? data.title.replace(/</g, '&lt;') : 'Untitled';
+      const safeCategory = data.category ? data.category.replace(/</g, '&lt;') : '';
+
+      card.innerHTML =
+        badgeHTML +
+        '<div class="project-img"><img loading="lazy" decoding="async" src="' + (data.heroImg || 'images/logo.png') + '" alt="' + safeTitle + '"></div>' +
+        '<div class="project-overlay"><div class="project-info"><h3>' + safeTitle + '</h3><span>' + safeCategory + '</span></div></div>';
+
+      fragment.appendChild(card);
+      newCards.push(card);
+    });
+
+    // Prepend Firestore cards before hardcoded ones
+    grid.insertBefore(fragment, grid.firstChild);
+
+    // Observe new cards for scroll-reveal animation
+    const firestoreRevealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          firestoreRevealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+    newCards.forEach(card => firestoreRevealObserver.observe(card));
+
+    // Re-bind filter buttons to include the new cards
+    const filterButtons = document.querySelectorAll('.portfolio-filters button');
+    const allCards = document.querySelectorAll('#projectsGrid .project-card');
+    filterButtons.forEach(btn => {
+      // Clone and replace to remove old listeners
+      const newBtn = btn.cloneNode(true);
+      btn.parentNode.replaceChild(newBtn, btn);
+      newBtn.addEventListener('click', () => {
+        if (newBtn.classList.contains('active')) return;
+        document.querySelectorAll('.portfolio-filters button').forEach(b => b.classList.remove('active'));
+        newBtn.classList.add('active');
+        const filter = newBtn.dataset.filter;
+        const projectsGrid = document.querySelector('#projectsGrid');
+        if (projectsGrid) {
+          projectsGrid.style.transition = 'opacity 0.3s ease, transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+          projectsGrid.style.opacity = '0';
+          projectsGrid.style.transform = 'translateY(15px)';
+          setTimeout(() => {
+            document.querySelectorAll('#projectsGrid .project-card').forEach(card => {
+              card.style.transition = 'none';
+              card.style.opacity = '1';
+              card.style.transform = 'none';
+              if (filter === 'all' || card.dataset.category === filter) {
+                card.style.display = '';
+              } else {
+                card.style.display = 'none';
+              }
+            });
+            requestAnimationFrame(() => {
+              projectsGrid.style.opacity = '1';
+              projectsGrid.style.transform = 'translateY(0)';
+            });
+          }, 300);
+        }
+      });
+    });
+
+  } catch (err) {
+    console.warn('Firestore portfolio fetch failed (non-blocking):', err);
+  }
+}
+
 // ========== Load Project Details ==========
-function loadProjectDetails() {
+async function loadProjectDetails() {
   const params = new URLSearchParams(window.location.search);
   const projectId = params.get('project') || 'modern-apartment';
-  const project = projects[projectId] || projects['modern-apartment'];
+
+  // Try Firestore first, then fall back to hardcoded data
+  let project = projects[projectId];
+
+  if (typeof firebase !== 'undefined' && firebase.apps.length > 0) {
+    try {
+      const doc = await firebase.firestore().collection('projects').doc(projectId).get();
+      if (doc.exists) {
+        project = doc.data();
+        // Cache in projects object for lightbox reference
+        projects[projectId] = project;
+      }
+    } catch (err) {
+      console.warn('Firestore project fetch failed, using hardcoded:', err);
+    }
+  }
+
+  if (!project) {
+    project = projects['modern-apartment'];
+  }
 
   // Update page
   document.title = `${project.title} — Artex Designs`;
   document.getElementById('projectTitle').textContent = project.title;
   document.getElementById('projectBreadcrumb').textContent = project.title;
+
+  // Optimistically preload project hero image
+  if (project.heroImg) {
+    const preloadLink = document.createElement('link');
+    preloadLink.rel = 'preload';
+    preloadLink.as = 'image';
+    preloadLink.href = project.heroImg;
+    preloadLink.setAttribute('fetchpriority', 'high');
+    document.head.appendChild(preloadLink);
+  }
+
   document.getElementById('projectHero').style.backgroundImage = `url('${project.heroImg}')`;
   document.getElementById('projectHeading').textContent = project.title;
   document.getElementById('projectDesc1').textContent = project.desc1;
@@ -836,19 +1136,27 @@ function init360Tour(project) {
   const loaderEl = document.getElementById('tour360Loader');
   const fadeEl = document.getElementById('tour360Fade');
   const sceneNavEl = document.getElementById('tour360SceneNav');
+  const flatEl = document.getElementById('tourFlat');
+  const flatImgEl = document.getElementById('tourFlatImg');
+  const flatHotspotsEl = document.getElementById('tourFlatHotspots');
 
   if (!viewerEl || !project.scenes) return;
 
   const sceneIds = Object.keys(project.scenes);
+  const preloadedImages = new Set();
   const firstScene = sceneIds[0];  // Default starting scene
-
   let currentSceneId = firstScene;
+
+  // Find first 360 scene
+  const first360Scene = sceneIds.find(id => !project.scenes[id].isFlat) || sceneIds[0];
 
   // ---- Build Pannellum scene config ----
   const pannellumScenes = {};
 
   sceneIds.forEach(sceneId => {
     const scene = project.scenes[sceneId];
+    if (scene.isFlat) return; // skip flat scenes in Pannellum config
+
     const hotspots = scene.hotspots.map((hs, idx) => ({
       /* ================================================
          HOTSPOT COORDINATE REFERENCE:
@@ -874,9 +1182,13 @@ function init360Tour(project) {
           <div class="hotspot-pulse"></div>
           <div class="hotspot-label">${hs.label}</div>
         `;
-        hotSpotDiv.addEventListener('click', () => {
+        const hsClick = (e) => {
+          e.preventDefault();
+          e.stopPropagation();
           navigateToScene(hs.targetScene);
-        });
+        };
+        hotSpotDiv.addEventListener('pointerup', hsClick);
+        hotSpotDiv.addEventListener('click', hsClick);
       },
       createTooltipArgs: ''
     }));
@@ -896,7 +1208,7 @@ function init360Tour(project) {
   // ---- Initialize Pannellum Viewer ----
   const viewer = pannellum.viewer('tour360Viewer', {
     default: {
-      firstScene: firstScene,
+      firstScene: first360Scene,
       autoLoad: true,
       showZoomCtrl: true,
       showFullscreenCtrl: true,
@@ -908,10 +1220,25 @@ function init360Tour(project) {
       maxHfov: 120,
       autoRotate: -1.5,       // Gentle auto-rotate (negative = clockwise)
       autoRotateInactivityDelay: 5000,  // Start auto-rotate after 5s idle
-      sceneFadeDuration: 1200  // Smooth crossfade transition between scenes (ms)
+      sceneFadeDuration: 800  // Smooth crossfade transition between scenes (ms)
     },
     scenes: pannellumScenes
   });
+
+  // Immediate Watermark Injection (to avoid race conditions on first scene load)
+  if (viewerEl && !viewerEl.querySelector('.tour-watermark')) {
+    const watermark = document.createElement('div');
+    watermark.className = 'tour-watermark';
+    watermark.innerHTML = '<span>© Developed by</span> <span class="gold-text">Artex Designs</span>';
+    viewerEl.appendChild(watermark);
+  }
+
+  // Check if initial scene is flat
+  if (project.scenes[firstScene].isFlat) {
+    showFlatScene(firstScene);
+  } else {
+    if (flatEl) flatEl.style.display = 'none';
+  }
 
   // ---- Hide loading overlay & Fullscreen Fallback for iPhone ----
   viewer.on('load', () => {
@@ -935,10 +1262,33 @@ function init360Tour(project) {
         e.stopPropagation();
         const pid = new URLSearchParams(window.location.search).get('project') || 'virtual-tour-360';
         window.open('standalone-tour.html?project=' + pid, '_blank');
-
       });
 
       container.appendChild(customFsBtn);
+    }
+
+    // 2. Dynamic Premium Watermark Overlay
+    if (viewerEl && !viewerEl.querySelector('.tour-watermark')) {
+      const watermark = document.createElement('div');
+      watermark.className = 'tour-watermark';
+      watermark.innerHTML = '<span>© Developed by</span> <span class="gold-text">Artex Designs</span>';
+      viewerEl.appendChild(watermark);
+    }
+
+    // 3. Preload adjacent 360 scenes for seamless transitions
+    const currentId = viewer.getScene();
+    const scene = project.scenes[currentId];
+    if (scene && scene.hotspots) {
+      scene.hotspots.forEach(hs => {
+        if (hs.targetScene) {
+          const target = project.scenes[hs.targetScene];
+          if (target && target.image && !target.isFlat && !preloadedImages.has(target.image)) {
+            const img = new Image();
+            img.src = target.image;
+            preloadedImages.add(target.image);
+          }
+        }
+      });
     }
   });
 
@@ -946,13 +1296,84 @@ function init360Tour(project) {
   function navigateToScene(targetSceneId) {
     if (targetSceneId === currentSceneId) return;
 
+    const targetScene = project.scenes[targetSceneId];
+    if (!targetScene) return;
+
     // Show loading overlay during image fetch to prevent perceived lag
     if (loaderEl) loaderEl.classList.remove('hidden');
 
-    // Use Pannellum's native WebGL crossfade transition (sceneFadeDuration)
-    viewer.loadScene(targetSceneId);
+    if (targetScene.isFlat) {
+      showFlatScene(targetSceneId);
+    } else {
+      show360Scene(targetSceneId);
+    }
+
     currentSceneId = targetSceneId;
     updateSceneNav(targetSceneId);
+  }
+
+  function showFlatScene(sceneId) {
+    const scene = project.scenes[sceneId];
+    if (!scene) return;
+
+    if (flatImgEl) {
+      flatImgEl.src = scene.image;
+    }
+
+    if (flatHotspotsEl) {
+      flatHotspotsEl.innerHTML = '';
+      if (scene.hotspots) {
+        scene.hotspots.forEach((hs, idx) => {
+          const hsDiv = document.createElement('div');
+          hsDiv.className = 'tour-hotspot';
+          hsDiv.style.position = 'absolute';
+          hsDiv.style.left = `${hs.x}%`;
+          hsDiv.style.top = `${hs.y}%`;
+
+          hsDiv.innerHTML = `
+            <div class="hotspot-inner">
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            </div>
+            <div class="hotspot-pulse"></div>
+            <div class="hotspot-label">${hs.label}</div>
+          `;
+
+          const hsClick = (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            navigateToScene(hs.targetScene);
+          };
+          hsDiv.addEventListener('pointerup', hsClick);
+          hsDiv.addEventListener('click', hsClick);
+
+          flatHotspotsEl.appendChild(hsDiv);
+        });
+      }
+    }
+
+    // Hide loader once image loads
+    if (flatImgEl) {
+      if (flatImgEl.complete) {
+        if (loaderEl) loaderEl.classList.add('hidden');
+      } else {
+        flatImgEl.onload = () => {
+          if (loaderEl) loaderEl.classList.add('hidden');
+        };
+      }
+    } else {
+      if (loaderEl) loaderEl.classList.add('hidden');
+    }
+
+    if (flatEl) {
+      flatEl.style.display = 'block';
+    }
+  }
+
+  function show360Scene(sceneId) {
+    if (flatEl) {
+      flatEl.style.display = 'none';
+    }
+    viewer.loadScene(sceneId);
   }
 
   // ---- Build Scene Navigation Pills ----
@@ -981,10 +1402,77 @@ function init360Tour(project) {
   buildSceneNav();
 
   // Expose viewer to console for debugging hotspot positions
-  // Usage: In browser console, type: window.tour360Viewer.getYaw() / .getPitch()
   window.tour360Viewer = viewer;
 
-  // Coordinate Helper Tool removed — re-add from git history if needed for calibration
+  // ====== COORDINATE HELPER TOOL (for hotspot calibration) ======
+  function activateCoordHelper() {
+    const parentEl = viewerEl.parentElement;
+
+    const helperBanner = document.createElement('div');
+    helperBanner.id = 'coordHelperBanner';
+    helperBanner.style.cssText = [
+      'position:absolute', 'top:12px', 'left:50%', 'transform:translateX(-50%)',
+      'background:rgba(212,175,55,0.92)', 'color:#000', 'font-family:monospace',
+      'font-size:13px', 'padding:7px 16px', 'border-radius:20px',
+      'z-index:9999', 'pointer-events:none', 'white-space:nowrap',
+      'box-shadow:0 2px 12px rgba(0,0,0,0.4)', 'letter-spacing:0.05em'
+    ].join(';');
+    helperBanner.textContent = '🎯 Coord Helper ON — click viewer to log coordinates';
+    parentEl.appendChild(helperBanner);
+
+    const coordDisplay = document.createElement('div');
+    coordDisplay.id = 'coordDisplay';
+    coordDisplay.style.cssText = [
+      'position:absolute', 'bottom:60px', 'left:50%', 'transform:translateX(-50%)',
+      'background:rgba(0,0,0,0.85)', 'color:#d4af37', 'font-family:monospace',
+      'font-size:14px', 'padding:8px 18px', 'border-radius:8px',
+      'z-index:9999', 'pointer-events:none', 'display:none',
+      'border:1px solid rgba(212,175,55,0.4)'
+    ].join(';');
+    parentEl.appendChild(coordDisplay);
+
+    // 360 Viewer Coordinate Click
+    viewerEl.addEventListener('click', function (e) {
+      try {
+        const coords = viewer.mouseEventToCoords(e);
+        const pitch = coords[0].toFixed(2);
+        const yaw = coords[1].toFixed(2);
+        const scene = viewer.getScene();
+        const msg = `Scene: "${scene}" | pitch: ${pitch}, yaw: ${yaw}`;
+        console.log('%c[360 Coord Helper] ' + msg, 'color:#d4af37;font-weight:bold;');
+        coordDisplay.textContent = `pitch: ${pitch} | yaw: ${yaw}`;
+        coordDisplay.style.display = 'block';
+        setTimeout(() => { coordDisplay.style.display = 'none'; }, 3000);
+      } catch (err) {
+        console.warn('Coord helper error:', err);
+      }
+    });
+
+    // Flat Image Coordinate Click
+    if (flatEl) {
+      flatEl.addEventListener('click', function (e) {
+        try {
+          const rect = flatEl.getBoundingClientRect();
+          const x = (((e.clientX - rect.left) / rect.width) * 100).toFixed(2);
+          const y = (((e.clientY - rect.top) / rect.height) * 100).toFixed(2);
+
+          const msg = `Flat Scene: "${currentSceneId}" | x: ${x}, y: ${y}`;
+          console.log('%c[Flat Coord Helper] ' + msg, 'color:#d4af37;font-weight:bold;');
+
+          coordDisplay.textContent = `x: ${x}% | y: ${y}%`;
+          coordDisplay.style.display = 'block';
+          setTimeout(() => { coordDisplay.style.display = 'none'; }, 3000);
+        } catch (err) {
+          console.warn('Flat coord helper error:', err);
+        }
+      });
+    }
+  }
+
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get('debug') === '1') {
+    activateCoordHelper();
+  }
 }
 
 

@@ -7,6 +7,8 @@
   <meta name="description"
     content="Explore the details of our interior design project — gallery, design approach, and project specifications.">
   <title>Project Details — Artex Designs</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
   <link rel="stylesheet" href="styles.css">
   <!-- Pannellum 360° Viewer CDN -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css">
@@ -248,8 +250,16 @@
               </div>
               <span class="tour-instructions">Drag to look around · Scroll to zoom · Click hotspots to navigate</span>
             </div>
-            <div class="tour-360-container" id="tour360Viewer">
-              <!-- Pannellum renders here -->
+            <div class="tour-360-container" style="position: relative;">
+              <div id="tour360Viewer" style="width: 100%; height: 100%;"></div>
+              <div id="tourFlat" class="tour-flat-overlay" style="position: absolute; inset: 0; z-index: 10; display: none;">
+                <img id="tourFlatImg" src="" style="width: 100%; height: 100%; object-fit: cover; display: block;" alt="Flat Overview">
+                <div id="tourFlatHotspots" class="tour-flat-hotspots" style="position: absolute; inset: 0; pointer-events: none;"></div>
+                <div class="tour-watermark">
+                  <span>© Developed by</span>
+                  <span class="gold-text">Artex Designs</span>
+                </div>
+              </div>
             </div>
             <!-- Loading overlay -->
             <div class="tour-360-loader" id="tour360Loader">
@@ -379,6 +389,10 @@
       <polyline points="18 15 12 9 6 15" />
     </svg></div>
 
+  <!-- Firebase SDK (read-only for visitors) -->
+  <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore-compat.js"></script>
+  <script src="firebase-config.js"></script>
   <script src="script.js"></script>
 </body>
 

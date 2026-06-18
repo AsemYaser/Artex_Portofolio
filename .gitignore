@@ -3,3 +3,5 @@ _backup_originals/
 *.py
 node_modules/
 .DS_Store
+.idea/
+**/_originals_backup/

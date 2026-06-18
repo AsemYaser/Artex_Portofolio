@@ -2574,6 +2574,35 @@ body.dark-mode .header.dark .logo .logo-text {
   contain-intrinsic-size: 100% 56.25vw; /* Approximates 16:9 aspect ratio while off-screen */
 }
 
+/* --- Flat Image Overlay --- */
+.tour-flat-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  overflow: hidden;
+}
+
+.tour-flat-overlay img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.tour-flat-hotspots {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 12;
+}
+
+.tour-flat-hotspots .tour-hotspot {
+  pointer-events: auto;
+}
+
 .tour-360-container .pnlm-container {
   border-radius: 12px;
 }
@@ -3079,6 +3108,48 @@ body.dark-mode .header.dark .logo .logo-text {
   opacity: 0.7;
 }
 */
+
+/* --- 360° Tour Performance containment & Watermark styling --- */
+.tour-360-container {
+  contain: layout style paint;
+}
+
+.stacked-slide {
+  will-change: transform;
+}
+
+.tour-watermark {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  z-index: 99; /* Above WebGL canvas and flat overlay, but permits pointer events to fall through */
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+  background: rgba(26, 26, 26, 0.65);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(193, 157, 95, 0.35); /* Subtle brand gold border */
+  border-radius: 4px;
+  padding: 8px 14px;
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-white);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.tour-watermark .gold-text {
+  color: var(--color-gold-light);
+  font-weight: 600;
+}
+
 
 
 
