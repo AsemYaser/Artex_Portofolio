@@ -228,7 +228,16 @@ const projects = {
           { x: 72, y: 22, targetScene: 'nile-view',      label: 'Go to Nile View' },
           { x: 36, y: 42, targetScene: 'hotel',          label: 'Go to Hotel' },
           { x: 89, y: 65, targetScene: 'kids-gate',      label: 'Go to Kids Gate' },
-          { x: 72, y: 41, targetScene: 'gateway',       label: 'Go to Gateway' }
+          { x: 72, y: 41, targetScene: 'gateway',       label: 'Go to Gateway' },
+          { x: 58, y: 74, targetScene: 'pano1_2',       label: 'Go to 1_2 - Panorama' },
+          { x: 68, y: 61, targetScene: 'pano1_3',       label: 'Go to 1_3 - Panorama' },
+          { x: 61, y: 60, targetScene: 'pano1_4',       label: 'Go to 1_4 - Panorama' },
+          { x: 26, y: 84, targetScene: 'pano1_5',       label: 'Go to 1_5 - Panorama' },
+          { x: 28, y: 65, targetScene: 'pano1_6',       label: 'Go to 1_6 - Panorama' },
+          { x: 43, y: 68, targetScene: 'pano1_7',       label: 'Go to 1_7 - Panorama' },
+          { x: 89, y: 46, targetScene: 'pano1_8',       label: 'Go to 1_8 - Panorama' },
+          { x: 98, y: 39, targetScene: 'pano1_9',       label: 'Go to Padel Court' },
+          { x: 36, y: 24, targetScene: 'pano1_10',      label: 'Go to 1_10 - Panorama' }
         ]
       },
       'gateway': {
@@ -356,6 +365,76 @@ const projects = {
           { pitch: -2,   yaw: -146, targetScene: 'kids-area', label: 'Go to Kids Area' },
           { pitch: -0.5, yaw: -99,  targetScene: 'hall',      label: 'Go to Hall Area' }
         ]
+      },
+      'pano1_1': {
+        image: '360_Projects/White_Park/1_1 - Panorama.jpg',
+        label: '1_1 - Panorama',
+        defaultPitch: 0,
+        defaultYaw: 0,
+        hotspots: []
+      },
+      'pano1_2': {
+        image: '360_Projects/White_Park/1_2 - Panorama.jpg',
+        label: '1_2 - Panorama',
+        defaultPitch: 0,
+        defaultYaw: 0,
+        hotspots: []
+      },
+      'pano1_3': {
+        image: '360_Projects/White_Park/1_3 - Panorama.jpg',
+        label: '1_3 - Panorama',
+        defaultPitch: 0,
+        defaultYaw: 0,
+        hotspots: []
+      },
+      'pano1_4': {
+        image: '360_Projects/White_Park/1_4 - Panorama.jpg',
+        label: '1_4 - Panorama',
+        defaultPitch: 0,
+        defaultYaw: 0,
+        hotspots: []
+      },
+      'pano1_5': {
+        image: '360_Projects/White_Park/1_5 - Panorama.jpg',
+        label: '1_5 - Panorama',
+        defaultPitch: 0,
+        defaultYaw: 0,
+        hotspots: []
+      },
+      'pano1_6': {
+        image: '360_Projects/White_Park/1_6 - Panorama.jpg',
+        label: '1_6 - Panorama',
+        defaultPitch: 0,
+        defaultYaw: 0,
+        hotspots: []
+      },
+      'pano1_7': {
+        image: '360_Projects/White_Park/1_7 - Panorama.jpg',
+        label: '1_7 - Panorama',
+        defaultPitch: 0,
+        defaultYaw: 0,
+        hotspots: []
+      },
+      'pano1_8': {
+        image: '360_Projects/White_Park/1_8 - Panorama.jpg',
+        label: '1_8 - Panorama',
+        defaultPitch: 0,
+        defaultYaw: 0,
+        hotspots: []
+      },
+      'pano1_9': {
+        image: '360_Projects/White_Park/1_9 - Panorama.jpg',
+        label: '1_9 - Panorama',
+        defaultPitch: 0,
+        defaultYaw: 0,
+        hotspots: []
+      },
+      'pano1_10': {
+        image: '360_Projects/White_Park/1_10 - Panorama.jpg',
+        label: '1_10 - Panorama',
+        defaultPitch: 0,
+        defaultYaw: 0,
+        hotspots: []
       }
     }
   },
@@ -1141,6 +1220,19 @@ function init360Tour(project) {
   const flatHotspotsEl = document.getElementById('tourFlatHotspots');
 
   if (!viewerEl || !project.scenes) return;
+
+  // Automatically inject back-to-overview hotspot to all equirectangular 360 scenes in White Park
+  if (project.title.toLowerCase().includes('white park') || project.client.toLowerCase().includes('white park') || project.scenes['overview']) {
+    Object.keys(project.scenes).forEach(sceneId => {
+      const scene = project.scenes[sceneId];
+      if (!scene.isFlat) {
+        if (!scene.hotspots) scene.hotspots = [];
+        if (!scene.hotspots.some(hs => hs.targetScene === 'overview')) {
+          scene.hotspots.push({ pitch: 60, yaw: -52, targetScene: 'overview', label: 'Go to Site 22 — Overview' });
+        }
+      }
+    });
+  }
 
   const sceneIds = Object.keys(project.scenes);
   const preloadedImages = new Set();
