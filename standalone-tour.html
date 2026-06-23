@@ -478,7 +478,7 @@
           const isWhitePark = projectId === 'white-park-360';
           let backBtn = null;
           if (isWhitePark) {
-            backBtn = viewerEl.parentElement.querySelector('.tour-back-btn');
+            backBtn = viewerEl.querySelector('.tour-back-btn');
             if (!backBtn) {
               backBtn = document.createElement('button');
               backBtn.className = 'tour-back-btn';
@@ -489,9 +489,13 @@
                 <span>Back to</span> <span class="gold-text">Overview</span>
               `;
               backBtn.addEventListener('click', () => {
+                if (document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement) {
+                  const exitFs = document.exitFullscreen || document.webkitExitFullscreen || document.msExitFullscreen;
+                  if (exitFs) exitFs.call(document).catch(err => console.warn(err));
+                }
                 navigateToScene('overview');
               });
-              viewerEl.parentElement.appendChild(backBtn);
+              viewerEl.appendChild(backBtn);
             }
           }
 
