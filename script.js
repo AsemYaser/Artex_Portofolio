@@ -1221,17 +1221,25 @@ function init360Tour(project) {
 
   if (!viewerEl || !project.scenes) return;
 
-  // Automatically inject back-to-overview hotspot to all equirectangular 360 scenes in White Park
-  if (project.title.toLowerCase().includes('white park') || project.client.toLowerCase().includes('white park') || project.scenes['overview']) {
-    Object.keys(project.scenes).forEach(sceneId => {
-      const scene = project.scenes[sceneId];
-      if (!scene.isFlat) {
-        if (!scene.hotspots) scene.hotspots = [];
-        if (!scene.hotspots.some(hs => hs.targetScene === 'overview')) {
-          scene.hotspots.push({ pitch: 60, yaw: -52, targetScene: 'overview', label: 'Go to Site 22 — Overview' });
-        }
-      }
-    });
+  // Create Back to Overview button dynamically for White Park
+  const isWhitePark = project.title.toLowerCase().includes('white park') || project.client.toLowerCase().includes('white park') || project.scenes['overview'];
+  let backBtn = null;
+  if (isWhitePark) {
+    backBtn = viewerEl.parentElement.querySelector('.tour-back-btn');
+    if (!backBtn) {
+      backBtn = document.createElement('button');
+      backBtn.className = 'tour-back-btn';
+      backBtn.innerHTML = `
+        <svg viewBox="0 0 24 24" width="14" height="14" style="fill: currentColor; margin-right: 4px;">
+          <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+        </svg>
+        <span>Back to</span> <span class="gold-text">Overview</span>
+      `;
+      backBtn.addEventListener('click', () => {
+        navigateToScene('overview');
+      });
+      viewerEl.parentElement.appendChild(backBtn);
+    }
   }
 
   const sceneIds = Object.keys(project.scenes);
@@ -1333,6 +1341,11 @@ function init360Tour(project) {
     if (flatEl) flatEl.style.display = 'none';
   }
 
+  // Set initial visibility of back to overview button
+  if (backBtn) {
+    backBtn.style.display = firstScene === 'overview' ? 'none' : 'flex';
+  }
+
   // ---- Hide loading overlay & Fullscreen Fallback for iPhone ----
   viewer.on('load', () => {
     if (loaderTimeout) {
@@ -1412,6 +1425,11 @@ function init360Tour(project) {
 
     currentSceneId = targetSceneId;
     updateSceneNav(targetSceneId);
+
+    // Toggle Back to Overview button visibility dynamically
+    if (backBtn) {
+      backBtn.style.display = targetSceneId === 'overview' ? 'none' : 'flex';
+    }
   }
 
   function showFlatScene(sceneId) {
