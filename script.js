@@ -237,7 +237,8 @@ const projects = {
           { x: 43, y: 68, targetScene: 'pano1_7',       label: 'Go to 1_7 - Panorama' },
           { x: 89, y: 46, targetScene: 'pano1_8',       label: 'Go to 1_8 - Panorama' },
           { x: 98, y: 39, targetScene: 'pano1_9',       label: 'Go to Padel Court' },
-          { x: 36, y: 24, targetScene: 'pano1_10',      label: 'Go to 1_10 - Panorama' }
+          { x: 36, y: 24, targetScene: 'pano1_10',      label: 'Go to 1_10 - Panorama' },
+          { x: 30, y: 97, targetScene: 'pano1_11',      label: 'Go to 1_11 - Panorama' }
         ]
       },
       'gateway': {
@@ -1485,13 +1486,25 @@ function init360Tour(project) {
     // Hide loader once image loads
     if (flatImgEl) {
       if (flatImgEl.complete) {
+        if (loaderTimeout) {
+          clearTimeout(loaderTimeout);
+          loaderTimeout = null;
+        }
         if (loaderEl) loaderEl.classList.add('hidden');
       } else {
         flatImgEl.onload = () => {
+          if (loaderTimeout) {
+            clearTimeout(loaderTimeout);
+            loaderTimeout = null;
+          }
           if (loaderEl) loaderEl.classList.add('hidden');
         };
       }
     } else {
+      if (loaderTimeout) {
+        clearTimeout(loaderTimeout);
+        loaderTimeout = null;
+      }
       if (loaderEl) loaderEl.classList.add('hidden');
     }
 
