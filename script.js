@@ -435,6 +435,13 @@ const projects = {
         defaultPitch: 0,
         defaultYaw: 0,
         hotspots: []
+      },
+      'pano1_11': {
+        image: '360_Projects/White_Park/1_11 - Panorama.jpg',
+        label: '1_11 - Panorama',
+        defaultPitch: 0,
+        defaultYaw: 0,
+        hotspots: []
       }
     }
   },
@@ -1593,10 +1600,8 @@ function init360Tour(project) {
     }
   }
 
-  const urlParams = new URLSearchParams(window.location.search);
-  if (urlParams.get('debug') === '1') {
-    activateCoordHelper();
-  }
+  // Coordinate helper reactivated unconditionally to place new hotspot
+  activateCoordHelper();
 }
 
 
