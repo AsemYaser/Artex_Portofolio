@@ -1613,8 +1613,11 @@ function init360Tour(project) {
     }
   }
 
-  // Coordinate helper reactivated unconditionally to place new hotspot
-  activateCoordHelper();
+  // Coordinate helper gated under debug parameter
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get('debug') === '1') {
+    activateCoordHelper();
+  }
 }
 
 
